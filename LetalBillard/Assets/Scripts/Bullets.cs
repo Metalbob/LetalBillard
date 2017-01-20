@@ -4,13 +4,54 @@ using UnityEngine;
 
 public class Bullets : MonoBehaviour {
 
-	// Use this for initialization
+    [SerializeField]
+    private const int SPEED = 10;
+
+    private bool isMoving = false;
+    private Rigidbody2D rgbg2D;
+    [SerializeField]
+    private int bounceCount = 0;
+    private Transform deathPos;
+    private Vector3 velocity;
+    public GameObject dieAnim;
+	
+    
+    public void initialize(float pAngle)
+    {
+        float lVelocityX = Mathf.Cos(pAngle * Mathf.Deg2Rad) * SPEED;
+        float lVelocityY = Mathf.Sin(pAngle * Mathf.Deg2Rad) * SPEED;
+        velocity = new Vector3(lVelocityX, lVelocityY);
+    }
+    
+    // Use this for initialization
 	void Start () {
-		
+        rgbg2D = GetComponent<Rigidbody2D>();
+        isMoving = true;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
-	}
+        if (isMoving)
+        {
+            rgbg2D.velocity = velocity;
+            isMoving = false;
+        }
+
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        bounceCount++;
+        if (bounceCount == 2)
+        {
+            deathPos = transform;
+            Destroy(this.gameObject);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        Debug.Log("y");
+        Instantiate(dieAnim, new Vector3(deathPos.position.x, deathPos.position.y, 0), Quaternion.identity);
+    }
 }
