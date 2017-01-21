@@ -76,10 +76,10 @@ public class PlayerController : MonoBehaviour {
     IEnumerator RumbleEnum(float time, float strength)
     {
         GamePadState state = GamePad.GetState((PlayerIndex)0);
-        GamePad.SetVibration((PlayerIndex)(1 - _input.playerIndex - 1), strength, strength);
+        GamePad.SetVibration((PlayerIndex)(_input.playerIndex - 1), strength, strength);
 
         yield return new WaitForSeconds(time);
-        GamePad.SetVibration((PlayerIndex)(1 - _input.playerIndex - 1), 0, 0);
+        GamePad.SetVibration((PlayerIndex)(_input.playerIndex - 1), 0, 0);
     }
 
     // Update is called once per frame
