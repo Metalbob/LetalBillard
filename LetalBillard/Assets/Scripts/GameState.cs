@@ -63,9 +63,9 @@ public class GameState : MonoBehaviour
     {
         int randomPlayer1 = (int)Mathf.Floor(Random.value * _spawnPlayer1.Length);
         int randomPlayer2 = (int)Mathf.Floor(Random.value * _spawnPlayer2.Length);
-        _player1 = Instantiate(_prefabPlayer1, _spawnPlayer1[randomPlayer1].transform.position, _spawnPlayer1[randomPlayer1].transform.rotation) as GameObject;
+        _player1 = Instantiate(_prefabPlayer1, _spawnPlayer1[randomPlayer1].transform.position, _spawnPlayer1[randomPlayer1].transform.rotation * Quaternion.Euler(0, 0, 64)) as GameObject;
         _player1.GetComponent<PlayerController>().playerIndex = 1;
-        _player2 = Instantiate(_prefabPlayer2, _spawnPlayer2[randomPlayer2].transform.position, _spawnPlayer2[randomPlayer2].transform.rotation) as GameObject;
+        _player2 = Instantiate(_prefabPlayer2, _spawnPlayer2[randomPlayer2].transform.position, _spawnPlayer2[randomPlayer2].transform.rotation * Quaternion.Euler(0, 0, 64)) as GameObject;
         _player2.GetComponent<PlayerController>().playerIndex = 2;
     }
 
@@ -121,27 +121,41 @@ public class GameState : MonoBehaviour
     {
         Debug.Log("EndRound");
 
-        _curState = State.EndRound;
+        if (_curState == State.RoundInProgress)
+        {
+            _player1.GetComponent<PlayerController>().StopVelocityPlayer();
+            _player2.GetComponent<PlayerController>().StopVelocityPlayer();
 
-        if (indexPlayer == 0)
-        {
-            _scoreP1++;
-        }
-        else
-        {
-            _scoreP2++;
-        }
+            if (indexPlayer == 0)
+            {
+                _scoreP1++;
+            }
+            else
+            {
+                _scoreP2++;
+            }
 
-        yield return new WaitForSeconds(3);
+            _curState = State.EndRound;
+    
+            yield return new WaitForSeconds(2);
 
-        if (_scoreP1 >= _scoreGoal || _scoreP2 >= _scoreGoal)
-        {
-            EndGame();
+            DestroyAllPlayers();
+
+            if (_scoreP1 >= _scoreGoal || _scoreP2 >= _scoreGoal)
+            {
+                EndGame();
+            }
+            else
+            {
+                StartCoroutine(StartRound());
+            }
         }
-        else
-        {
-            StartCoroutine(StartRound());
-        }
+    }
+
+    public void DestroyAllPlayers()
+    {
+        Destroy(_player1);
+        Destroy(_player2);
     }
 
     public void EndGame()
