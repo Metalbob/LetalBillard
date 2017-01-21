@@ -47,7 +47,6 @@ public class Shot : MonoBehaviour {
         if (Input.GetAxis(horizontalAxisName) < -0.4 || Input.GetAxis(horizontalAxisName) > 0.4 || Input.GetAxis(verticalAxisName) < -0.4 || Input.GetAxis(verticalAxisName) > 0.4) axis = new Vector2(Input.GetAxis(horizontalAxisName), Input.GetAxis(verticalAxisName));
         transform.parent.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(axis.y, axis.x) * Mathf.Rad2Deg + 64);
         atk = Input.GetAxis(fire);
-        Debug.Log(atk);
         if (atk > 0.2 && frameCount % fireRate == 0)
         {
              _anim.SetBool("isShooting", true);
