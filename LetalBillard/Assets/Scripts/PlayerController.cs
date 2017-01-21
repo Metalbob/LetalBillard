@@ -13,12 +13,16 @@ public class PlayerController : MonoBehaviour {
     private Vector2 _vel;
     private Animator _anim;
 
-    public string horizontalAxisName = "Horizontal";
-    public string verticalAxisName = "Vertical";
+    public string horizontalAxisNameP1 = "Horizontal_Player1";
+    public string horizontalAxisNameP2 = "Horizontal_Player2";
+
+    public string verticalAxisNameP1 = "Vertical_Player1";
+    public string verticalAxisNameP2 = "Vertical_Player2";
 
 
-	// Use this for initialization
-	void Start () {
+
+    // Use this for initialization
+    void Start () {
         _rb = GetComponent<Rigidbody2D>();
         _anim = GetComponent<Animator>();
 	}
@@ -30,7 +34,10 @@ public class PlayerController : MonoBehaviour {
 
     private void move()
     {
-        Vector2 axis = new Vector2(Input.GetAxis(horizontalAxisName), Input.GetAxis(verticalAxisName));
+        Vector2 axis;
+        if (playerIndex == 1) axis = new Vector2(Input.GetAxis(horizontalAxisNameP1), Input.GetAxis(verticalAxisNameP1));
+        else axis = new Vector2(Input.GetAxis(horizontalAxisNameP2), Input.GetAxis(verticalAxisNameP2));
+
         _vel += Time.deltaTime * axis * speed;
         if (_vel.x <= -0.2 || _vel.x >= 0.2 || _vel.y <= -0.2 || _vel.y >= 0.2) _anim.SetBool("isMoving", true);
         else _anim.SetBool("isMoving", false);
