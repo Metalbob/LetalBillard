@@ -13,4 +13,11 @@ public class SelectableButton : Button {
         base.OnSelect(eventData);
         onSelect.Invoke();
     }
+
+    public override void OnMove(AxisEventData eventData)
+    {
+        base.OnMove(eventData);
+        AudioManager.instance.Play(Resources.Load<AudioClip>("butt"));
+
+    }
 }
