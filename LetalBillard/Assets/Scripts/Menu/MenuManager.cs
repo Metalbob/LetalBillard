@@ -10,6 +10,7 @@ public class MenuManager : MonoBehaviour {
     public GameObject confirmQuitContainer;
     public Button defaultSelectedMainMenu;
     public Button defaultSelectedQuitMenu;
+    public AudioClip buttonClip;
 
     void Start()
     {
@@ -20,6 +21,7 @@ public class MenuManager : MonoBehaviour {
     {
         menuContainer.SetActive(false);
         waitInputMenuContainer.SetActive(true);
+        AudioManager.instance.Play(buttonClip);
     }
 
     public void BackToMain()
@@ -27,22 +29,26 @@ public class MenuManager : MonoBehaviour {
         defaultSelectedMainMenu.Select();
         menuContainer.SetActive(true);
         waitInputMenuContainer.SetActive(false);
+        AudioManager.instance.Play(buttonClip);
     }
 
     public void ConfirmQuit()
     {
         confirmQuitContainer.SetActive(true);
         defaultSelectedQuitMenu.Select();
+        AudioManager.instance.Play(buttonClip);
     }
 
     public void CloseConfirmMenu()
     {
         confirmQuitContainer.SetActive(false);
         defaultSelectedMainMenu.Select();
+        AudioManager.instance.Play(buttonClip);
     }
 
 	public void Quit()
     {
+        AudioManager.instance.Play(buttonClip);
         Application.Quit();
     }
 }
