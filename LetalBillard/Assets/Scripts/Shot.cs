@@ -10,10 +10,14 @@ public class Shot : MonoBehaviour {
     public string verticalAxisNameP2 = "Vertical2_Player2";
     public string fireP1 = "Fire1_Player1";
     public string fireP2 = "Fire1_Player2";
+    public int fireRate = 30;
+
     private Vector2 axis;
     public GameObject bulletPrefab;
     private Animator _anim;
     private PlayerController _ctrl;
+    private int frameCount = 0;
+
     // Use this for initialization
     void Start () {
         _anim = transform.parent.gameObject.GetComponent<Animator>();
@@ -22,6 +26,7 @@ public class Shot : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+        frameCount++;
         GameObject bullet;
         string horizontalAxisName;
         string verticalAxisName;
@@ -43,7 +48,7 @@ public class Shot : MonoBehaviour {
         transform.parent.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(axis.y, axis.x) * Mathf.Rad2Deg + 64);
         atk = Input.GetAxis(fire);
         Debug.Log(atk);
-        if (atk > 0.2)
+        if (atk > 0.2 && frameCount % fireRate == 0)
         {
              _anim.SetBool("isShooting", true);
             bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
