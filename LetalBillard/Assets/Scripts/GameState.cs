@@ -90,7 +90,6 @@ public class GameState : MonoBehaviour
 
     private IEnumerator StartGame()
     {
-        Debug.Log("StartGame");
 
         _curState = State.StartGame;
 
@@ -101,7 +100,6 @@ public class GameState : MonoBehaviour
 
     private IEnumerator StartRound()
     {
-        Debug.Log("StartRound");
         InitPosPlayer();
 
         _curState = State.StartRound;
@@ -112,14 +110,12 @@ public class GameState : MonoBehaviour
 
     private void RoundInProgress()
     {
-        Debug.Log("RoundInProgress");
 
         _curState = State.RoundInProgress;
     }
 
     public IEnumerator StopRound(int indexPlayer)
     {
-        Debug.Log("EndRound");
 
         if (_curState == State.RoundInProgress)
         {
@@ -160,7 +156,6 @@ public class GameState : MonoBehaviour
 
     public void EndGame()
     {
-        Debug.Log("EndGame");
 
         _curState = State.EndRound;
     }

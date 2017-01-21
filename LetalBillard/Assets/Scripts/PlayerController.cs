@@ -46,6 +46,7 @@ public class PlayerController : MonoBehaviour {
         if (_vel.x <= -deadPoint || _vel.x >= deadPoint || _vel.y <= -deadPoint || _vel.y >= deadPoint) _anim.SetBool("isMoving", true);
         else _anim.SetBool("isMoving", false);
     }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Bullet") StartCoroutine(death(1.0f));

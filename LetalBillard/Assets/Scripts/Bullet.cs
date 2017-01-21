@@ -64,7 +64,6 @@ public class Bullet : MonoBehaviour {
             Destroy(this.gameObject);
         } else
         {
-            Debug.Log(collision.collider.tag);
             Vector3 norm = collision.contacts[0].normal;
             if (collision.collider.tag == ("Wall"))
             {
