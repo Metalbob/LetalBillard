@@ -6,7 +6,7 @@ public class Shot : MonoBehaviour {
 
     public string horizontalAxisNameP1 = "Horizontal2_Player1";
     public string verticalAxisNameP1 = "Vertical2_Player1";
-    public string horizontalAxisNameP2 = "Horizontal2_Player1";
+    public string horizontalAxisNameP2 = "Horizontal2_Player2";
     public string verticalAxisNameP2 = "Vertical2_Player2";
     public string fireP1 = "Fire1_Player1";
     public string fireP2 = "Fire1_Player2";
