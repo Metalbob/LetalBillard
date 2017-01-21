@@ -23,7 +23,9 @@ public class PlayerController : MonoBehaviour {
 	
     void Update()
     {
-        if (GameState.Instance.CurState == GameState.State.RoundInProgress)
+        if (GameState.Instance.CurState == GameState.State.RoundInProgress ||
+            GameState.Instance.CurState == GameState.State.StartRound ||
+            GameState.Instance.CurState == GameState.State.EndRound)
         {
             move();
         }
@@ -61,7 +63,9 @@ public class PlayerController : MonoBehaviour {
     // Update is called once per frame
     void FixedUpdate ()
     {
-        if (GameState.Instance.CurState == GameState.State.RoundInProgress)
+        if (GameState.Instance.CurState == GameState.State.RoundInProgress ||
+            GameState.Instance.CurState == GameState.State.StartRound ||
+            GameState.Instance.CurState == GameState.State.EndRound)
         {
             _rb.velocity = _vel;
             _vel *= Mathf.Pow(dec, Time.fixedDeltaTime);
