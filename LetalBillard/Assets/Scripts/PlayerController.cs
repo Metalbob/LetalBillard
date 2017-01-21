@@ -37,13 +37,15 @@ public class PlayerController : MonoBehaviour {
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Bullet") death();
+        if (collision.gameObject.tag == "Bullet") StartCoroutine(death(1.0f));
     }
 
-    private void death()
+    IEnumerator death(float timeDead)
     {
         _anim.SetBool("isDead", true);
-        Destroy(this.gameObject);
+        yield return new WaitForSeconds(timeDead);
+        _anim.SetBool("isDead", false);
+        GameState.Instance.respawn(this.gameObject);
     }
 
     // Update is called once per frame

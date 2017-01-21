@@ -37,9 +37,9 @@ public class GameState : MonoBehaviour
     private GameObject _prefabPlayer2 = null;
 
     [SerializeField]
-    private GameObject _spawnPlayer1 = null;
+    private GameObject[] _spawnPlayer1;
     [SerializeField]
-    private GameObject _spawnPlayer2 = null;
+    private GameObject[] _spawnPlayer2;
 
     public State CurState { get { return _curState; } set { _curState = value; } }
     private State _curState = State.None;
@@ -57,7 +57,25 @@ public class GameState : MonoBehaviour
 
     private void InitPosPlayer()
     {
-        _player1 = Instantiate(_prefabPlayer1, _spawnPlayer1.transform.position, _spawnPlayer1.transform.rotation) as GameObject;
-        _player2 = Instantiate(_prefabPlayer2, _spawnPlayer2.transform.position, _spawnPlayer2.transform.rotation) as GameObject;
+        int randomPlayer1 = (int)Mathf.Floor(Random.value * _spawnPlayer1.Length);
+        int randomPlayer2 = (int)Mathf.Floor(Random.value * _spawnPlayer2.Length);
+        _player1 = Instantiate(_prefabPlayer1, _spawnPlayer1[randomPlayer1].transform.position, _spawnPlayer1[randomPlayer1].transform.rotation) as GameObject;
+        _player1.GetComponent<PlayerController>().playerIndex = 1;
+        _player2 = Instantiate(_prefabPlayer2, _spawnPlayer2[randomPlayer2].transform.position, _spawnPlayer2[randomPlayer2].transform.rotation) as GameObject;
+        _player2.GetComponent<PlayerController>().playerIndex = 2;
+    }
+
+    public void respawn(GameObject player)
+    {
+        if(player.GetComponent<PlayerController>().playerIndex == 1)
+        {
+            int randomPlayer1 = (int)Mathf.Floor(Random.value * _spawnPlayer1.Length);
+            player.transform.position = _spawnPlayer1[randomPlayer1].transform.position;
+        }
+        else
+        {
+            int randomPlayer2 = (int)Mathf.Floor(Random.value * _spawnPlayer2.Length);
+            player.transform.position = _spawnPlayer2[randomPlayer2].transform.position;
+        }
     }
 }
