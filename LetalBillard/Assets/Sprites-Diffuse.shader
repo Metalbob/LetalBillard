@@ -21,10 +21,10 @@ Shader "Sprites/DiffuseTransparent2"
 		Cull Off
 		Lighting Off
 		ZWrite Off
-		Blend SrcAlpha OneMinusDstAlpha
+		Blend SrcAlpha OneMinusSrcAlpha
 
 		CGPROGRAM
-		#pragma surface surf SimpleLambert vertex:vert nofog alpha:fade
+		#pragma surface surf SimpleLambert vertex:vert nofog noambient alpha:fade 
 		#pragma multi_compile _ PIXELSNAP_ON
 		#pragma multi_compile _ ETC1_EXTERNAL_ALPHA
 
@@ -37,8 +37,8 @@ Shader "Sprites/DiffuseTransparent2"
 			half NdotL = dot(s.Normal, lightDir);
 			bool NdotLOver = (NdotL > 0.5f);
 			half4 c;
-			c.rgb = s.Albedo  * (NdotL * atten);
-			c.a = s.Alpha * NdotL;
+			c.rgb = s.Albedo * clamp(NdotL * atten,0,1);
+			c.a = s.Alpha * NdotLOver;
 			return c;
 		}
 
