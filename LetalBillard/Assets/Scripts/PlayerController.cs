@@ -53,6 +53,7 @@ public class PlayerController : MonoBehaviour {
     IEnumerator death(float timeDead)
     {
         _anim.SetBool("isDead", true);
+        AudioManager.instance.Play(Resources.Load<AudioClip>("Audio/dead"));
         yield return new WaitForSeconds(timeDead);
         _anim.SetBool("isDead", false);
         //GameState.Instance.respawn(this.gameObject);

@@ -53,7 +53,7 @@ public class Shot : MonoBehaviour {
                 _anim.SetBool("isShooting", true);
                 bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
                 bullet.GetComponent<Bullet>().initialize(transform.right, _input.playerIndex);
-                Debug.LogError("SHOOOOOT");
+
                 AudioManager.instance.Play(Resources.Load<AudioClip>("Audio/shot"));
             }
             else if (frameCount % fireRate == 0) canShoot = true;
