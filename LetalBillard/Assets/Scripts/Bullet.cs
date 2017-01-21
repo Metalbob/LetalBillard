@@ -72,6 +72,8 @@ public class Bullet : MonoBehaviour {
             {
                 Instantiate(bounceEffect, collision.contacts[0].point, Quaternion.Euler(0, 0, Mathf.Atan2(norm.y, norm.x) * Mathf.Rad2Deg + 90));
                 decayTime -= hitTimePenalty;
+                Debug.LogError("HIT");
+                AudioManager.instance.Play(Resources.Load<AudioClip>("Audio/rebond"));
             }
             
             initialize(Vector2.Reflect(velocity.normalized, norm), index);
