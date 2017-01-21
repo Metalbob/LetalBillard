@@ -34,7 +34,6 @@ public class PlayerController : MonoBehaviour {
         Vector2 axis;
         axis = _input.moveAxis;
 
-        Debug.Log(axis);
         _vel += Time.deltaTime * axis * speed;
         if (_vel.magnitude  > deadPoint) _anim.SetBool("isMoving", true);
         else _anim.SetBool("isMoving", false);
