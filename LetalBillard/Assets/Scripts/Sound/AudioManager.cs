@@ -16,7 +16,20 @@ public class AudioManager : MonoBehaviour {
 	
 	public void Play(AudioClip clip)
     {
-        source.clip = clip;
-        source.Play();
+        //source.clip = clip;
+        //source.PlayOneShot(clip);
+        StartCoroutine(PlaySolo(clip));
+    }
+
+    IEnumerator PlaySolo(AudioClip clip)
+    {
+        AudioSource tempSource = gameObject.AddComponent<AudioSource>();
+        tempSource.clip = clip;
+        tempSource.Play();
+
+        while (tempSource.isPlaying)
+            yield return null;
+
+        Destroy(tempSource);
     }
 }

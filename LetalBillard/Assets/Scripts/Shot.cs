@@ -12,6 +12,7 @@ public class Shot : MonoBehaviour {
     private Animator _anim;
     private int frameCount = 0;
     private PlayerInput _input;
+    private bool canShoot = true;
 
     // Use this for initialization
     void Start () {
@@ -36,6 +37,15 @@ public class Shot : MonoBehaviour {
                 axis = inputAxis;
             }
             transform.parent.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(axis.y, axis.x) * Mathf.Rad2Deg + 64);
+<<<<<<< .mine
+            if (_input.fire > 0.2 && canShoot) // Todo: Inpractical in case you press a the wrong time you to have wait a whole fireFrame before firering. Also, don't count frame, count second.
+
+
+
+
+
+
+=======
         }
 
         if (GameState.Instance.CurState == GameState.State.RoundInProgress)
@@ -43,11 +53,17 @@ public class Shot : MonoBehaviour {
             GameObject bullet;
 
             if (_input.fire > 0.2 && frameCount % fireRate == 0) // Todo: Inpractical in case you press a the wrong time you to have wait a whole fireFrame before firering. Also, don't count frame, count second.
+>>>>>>> .theirs
             {
+                canShoot = false;
                 _anim.SetBool("isShooting", true);
                 bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
                 bullet.GetComponent<Bullet>().initialize(transform.right, _input.playerIndex);
+                Debug.LogError("SHOOOOOT");
+                AudioManager.instance.Play(Resources.Load<AudioClip>("Audio/shot"));
             }
+            else if (frameCount % fireRate == 0) canShoot = true;
+
             else _anim.SetBool("isShooting", false);
         }
     }
