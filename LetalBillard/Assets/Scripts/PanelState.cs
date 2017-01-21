@@ -29,6 +29,8 @@ public class PanelState : MonoBehaviour
     [SerializeField]
     private GameObject RoundInProgress;
     [SerializeField]
+    private GameObject Pause;
+    [SerializeField]
     private GameObject EndRound;
     [SerializeField]
     private GameObject EndGame;
@@ -38,6 +40,7 @@ public class PanelState : MonoBehaviour
         StartGame.SetActive(true);
         StartRound.SetActive(false);
         RoundInProgress.SetActive(false);
+        Pause.SetActive(false);
         EndRound.SetActive(false);
         EndGame.SetActive(false);
     }
@@ -47,6 +50,7 @@ public class PanelState : MonoBehaviour
         StartGame.SetActive(false);
         StartRound.SetActive(true);
         RoundInProgress.SetActive(false);
+        Pause.SetActive(false);
         EndRound.SetActive(false);
         EndGame.SetActive(false);
     }
@@ -56,6 +60,7 @@ public class PanelState : MonoBehaviour
         StartGame.SetActive(false);
         StartRound.SetActive(false);
         RoundInProgress.SetActive(true);
+        Pause.SetActive(false);
         EndRound.SetActive(false);
         EndGame.SetActive(false);
     }
@@ -65,6 +70,7 @@ public class PanelState : MonoBehaviour
         StartGame.SetActive(false);
         StartRound.SetActive(false);
         RoundInProgress.SetActive(false);
+        Pause.SetActive(false);
         EndRound.SetActive(true);
         EndGame.SetActive(false);
     }
@@ -74,8 +80,19 @@ public class PanelState : MonoBehaviour
         StartGame.SetActive(false);
         StartRound.SetActive(false);
         RoundInProgress.SetActive(false);
+        Pause.SetActive(false);
         EndRound.SetActive(false);
         EndGame.SetActive(true);
+    }
+
+    public void PausePanel()
+    {
+        StartGame.SetActive(false);
+        StartRound.SetActive(false);
+        RoundInProgress.SetActive(false);
+        Pause.SetActive(true);
+        EndRound.SetActive(false);
+        EndGame.SetActive(false);
     }
 
 }
