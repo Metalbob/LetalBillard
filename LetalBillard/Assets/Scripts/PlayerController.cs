@@ -59,6 +59,7 @@ public class PlayerController : MonoBehaviour {
 
     IEnumerator death(float timeDead)
     {
+        SlowMotion.instance.SlowMo(timeDead, 0.1f);
         _anim.SetBool("isDead", true);
         AudioManager.instance.Play(Resources.Load<AudioClip>("Audio/dead"));
         Rumble(rumbleTime, vibrationStrength);
