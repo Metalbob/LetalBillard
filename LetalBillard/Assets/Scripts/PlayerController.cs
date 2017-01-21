@@ -24,11 +24,12 @@ public class PlayerController : MonoBehaviour {
     void Update()
     {
         Vector2 axis = new Vector2(Input.GetAxis(horizontalAxisName), Input.GetAxis(verticalAxisName));
-        _vel += Time.deltaTime * axis * speed;
+         _vel += Time.deltaTime * axis * speed;
+
     }
 
-	// Update is called once per frame
-	void FixedUpdate () {
+    // Update is called once per frame
+    void FixedUpdate () {
         _rb.velocity = _vel;
         _vel *= Mathf.Pow(dec, Time.fixedDeltaTime);
 	}

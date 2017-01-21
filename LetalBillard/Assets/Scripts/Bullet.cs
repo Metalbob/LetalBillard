@@ -5,7 +5,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour {
 
     [SerializeField]
-    private const int SPEED = 10;
+    private int SPEED = 10;
 
     private bool isMoving = false;
     private Rigidbody2D rgbg2D;
@@ -16,10 +16,10 @@ public class Bullet : MonoBehaviour {
     public GameObject dieAnim;
 	
     
-    public void initialize(float pAngle)
+    public void initialize(Vector3 pForwardSource)
     {
-        float lVelocityX = Mathf.Cos(pAngle * Mathf.Deg2Rad) * SPEED;
-        float lVelocityY = Mathf.Sin(pAngle * Mathf.Deg2Rad) * SPEED;
+        float lVelocityX = pForwardSource.x * SPEED;
+        float lVelocityY = pForwardSource.y * SPEED;
         velocity = new Vector3(lVelocityX, lVelocityY);
     }
     
