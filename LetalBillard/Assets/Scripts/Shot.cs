@@ -17,7 +17,6 @@ public class Shot : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         GameObject bullet;
-        Debug.Log(Input.GetAxis(horizontalAxisName)+", "+ Input.GetAxis(verticalAxisName));
         if (Input.GetAxis(horizontalAxisName) < -0.4 || Input.GetAxis(horizontalAxisName) > 0.4 || Input.GetAxis(verticalAxisName) < -0.4 || Input.GetAxis(verticalAxisName) > 0.4) axis = new Vector2(Input.GetAxis(horizontalAxisName), Input.GetAxis(verticalAxisName));
         transform.parent.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(axis.y, axis.x) * Mathf.Rad2Deg + 64);
         if (Input.GetButtonDown("Fire1"))
