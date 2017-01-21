@@ -9,7 +9,7 @@ public class Bullet : MonoBehaviour {
 
     private bool isMoving = false;
     private Rigidbody2D rgbg2D;
-    [SerializeField]
+    public int bounceMax = 2;
     private int bounceCount = 0;
     private Transform deathPos;
     private Vector3 velocity;
@@ -42,7 +42,8 @@ public class Bullet : MonoBehaviour {
     private void OnCollisionEnter2D(Collision2D collision)
     {
         bounceCount++;
-        if (bounceCount == 2)
+        Debug.Log(bounceCount);
+        if (bounceCount == bounceMax)
         {
             deathPos = transform;
             Destroy(this.gameObject);
@@ -51,7 +52,6 @@ public class Bullet : MonoBehaviour {
 
     private void OnDestroy()
     {
-        Debug.Log("y");
-        Instantiate(dieAnim, new Vector3(deathPos.position.x, deathPos.position.y, 0), Quaternion.identity);
+        Instantiate(dieAnim, new Vector3(deathPos.position.x, deathPos.position.y), Quaternion.identity);
     }
 }

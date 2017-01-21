@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour {
 
     private Rigidbody2D _rb;
     private Vector2 _vel;
+    private Animator _anim;
 
     public string horizontalAxisName = "Horizontal";
     public string verticalAxisName = "Vertical";
@@ -19,13 +20,30 @@ public class PlayerController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         _rb = GetComponent<Rigidbody2D>();
+        _anim = GetComponent<Animator>();
 	}
 	
     void Update()
     {
-        Vector2 axis = new Vector2(Input.GetAxis(horizontalAxisName), Input.GetAxis(verticalAxisName));
-         _vel += Time.deltaTime * axis * speed;
+        move();
+    }
 
+    private void move()
+    {
+        Vector2 axis = new Vector2(Input.GetAxis(horizontalAxisName), Input.GetAxis(verticalAxisName));
+        _vel += Time.deltaTime * axis * speed;
+        if (_vel.x <= -0.2 || _vel.x >= 0.2 || _vel.y <= -0.2 || _vel.y >= 0.2) _anim.SetBool("isMoving", true);
+        else _anim.SetBool("isMoving", false);
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Bullet") death();
+    }
+
+    private void death()
+    {
+        _anim.SetBool("isDead", true);
+        Destroy(this.gameObject);
     }
 
     // Update is called once per frame

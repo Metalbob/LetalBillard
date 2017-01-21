@@ -8,10 +8,11 @@ public class Shot : MonoBehaviour {
     public string verticalAxisName = "Vertical2";
     private Vector2 axis;
     public GameObject bulletPrefab;
+    private Animator _anim;
     // Use this for initialization
     void Start () {
-		
-	}
+        _anim = transform.parent.gameObject.GetComponent<Animator>();
+    }
 
     // Update is called once per frame
     void Update() {
@@ -20,9 +21,11 @@ public class Shot : MonoBehaviour {
         transform.parent.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(axis.y, axis.x) * Mathf.Rad2Deg);
         if (Input.GetButtonDown("Fire1"))
         {
+             _anim.SetBool("isShooting", true);
             bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
             bullet.GetComponent<Bullet>().initialize(transform.right);
         }
+        else _anim.SetBool("isShooting", false);
 
     }
 }
