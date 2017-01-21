@@ -93,6 +93,7 @@ public class GameState : MonoBehaviour
         Debug.Log("StartGame");
 
         _curState = State.StartGame;
+        PanelState.Instance.StartGamePanel();
 
         yield return new WaitForSeconds(3);
 
@@ -105,6 +106,7 @@ public class GameState : MonoBehaviour
         InitPosPlayer();
 
         _curState = State.StartRound;
+        PanelState.Instance.StartRoundPanel();
 
         yield return new WaitForSeconds(3);
         RoundInProgress();
@@ -115,6 +117,7 @@ public class GameState : MonoBehaviour
         Debug.Log("RoundInProgress");
 
         _curState = State.RoundInProgress;
+        PanelState.Instance.RoundInProgressPanel();
     }
 
     public IEnumerator StopRound(int indexPlayer)
@@ -136,7 +139,8 @@ public class GameState : MonoBehaviour
             }
 
             _curState = State.EndRound;
-    
+            PanelState.Instance.EndRoundPanel();
+
             yield return new WaitForSeconds(2);
 
             DestroyAllPlayers();
@@ -162,6 +166,7 @@ public class GameState : MonoBehaviour
     {
         Debug.Log("EndGame");
 
-        _curState = State.EndRound;
+        _curState = State.EndGame;
+        PanelState.Instance.EndRoundPanel();
     }
 }
