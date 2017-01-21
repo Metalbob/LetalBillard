@@ -38,7 +38,7 @@ public class Shot : MonoBehaviour {
             {
                 _anim.SetBool("isShooting", true);
                 bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
-                bullet.GetComponent<Bullet>().initialize(transform.right);
+                bullet.GetComponent<Bullet>().initialize(transform.right, _input.playerIndex);
             }
             else _anim.SetBool("isShooting", false);
     }
