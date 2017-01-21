@@ -57,7 +57,7 @@ public class Shot : MonoBehaviour {
                     bullet.GetComponent<Bullet>().initialize(transform.right, _input.playerIndex);
                     cooldown = fireRate;
                     _anim.SetBool("isShooting", true);
-                   // AudioManager.instance.Play(Resources.Load<AudioClip>("Audio/shot"));
+                    AudioManager.instance.Play(Resources.Load<AudioClip>("Audio/shot"));
                     
                     scheduledShot = false;
                 }
