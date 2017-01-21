@@ -12,6 +12,8 @@ public class Bullet : MonoBehaviour {
     private float decelerateTime = 1.0f;
     [SerializeField]
     private float decelerationRate = 0.8f;
+    [SerializeField]
+    private float hitTimePenalty = 0.3f;
 
     private bool isMoving = false;
     private Rigidbody2D rgbg2D;
@@ -68,6 +70,7 @@ public class Bullet : MonoBehaviour {
             if (collision.collider.tag == ("Wall"))
             {
                 Instantiate(bounceEffect, collision.contacts[0].point, Quaternion.Euler(0, 0, Mathf.Atan2(norm.y, norm.x) * Mathf.Rad2Deg + 90));
+                decayTime -= hitTimePenalty;
             }
             
             initialize(Vector2.Reflect(velocity.normalized, norm));
@@ -84,7 +87,13 @@ public class Bullet : MonoBehaviour {
 
     IEnumerator decay(float time)
     {
-        yield return new WaitForSeconds(time);
+        float timer = 0.0f;
+        while(timer < decayTime)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        //yield return new WaitForSeconds(time);
         Destroy(this.gameObject);
     }
 
