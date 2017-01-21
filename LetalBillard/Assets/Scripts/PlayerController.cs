@@ -52,6 +52,7 @@ public class PlayerController : MonoBehaviour {
 
     IEnumerator death(float timeDead)
     {
+        SlowMotion.instance.SlowMo(timeDead, 0.1f);
         _anim.SetBool("isDead", true);
         yield return new WaitForSeconds(timeDead);
         _anim.SetBool("isDead", false);

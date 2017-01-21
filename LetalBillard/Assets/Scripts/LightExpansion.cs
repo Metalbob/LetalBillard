@@ -25,7 +25,6 @@ public class LightExpansion : MonoBehaviour {
         float time = 0.0f;
         while(time < apparitionDuration)
         {
-            Debug.Log(time + " " + apparitionDuration);
             time += Time.deltaTime;
             light.spotAngle = lightMaxAngle * Mathf.Clamp01(time / apparitionDuration);
             yield return null;
