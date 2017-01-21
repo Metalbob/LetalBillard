@@ -52,6 +52,9 @@ public class Bullet : MonoBehaviour {
 
     private void OnDestroy()
     {
-        Instantiate(dieAnim, new Vector3(deathPos.position.x, deathPos.position.y), Quaternion.identity);
+        if (dieAnim != null)
+        {
+            Instantiate(dieAnim, new Vector3(deathPos.position.x, deathPos.position.y), Quaternion.identity);
+        }
     }
 }
