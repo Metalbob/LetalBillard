@@ -5,14 +5,16 @@ using UnityEngine;
 public class Shot : MonoBehaviour {
 
     
-    public int fireRate = 30;
+    public float fireRate = 1.0f;
 
     private Vector2 axis;
     public GameObject bulletPrefab;
     private Animator _anim;
-    private int frameCount = 0;
+    private float cooldown = 1.0f;
     private PlayerInput _input;
-    private bool canShoot = true;
+    private bool scheduledShot = false;
+    private bool prevFireInput = false;
+
 
     // Use this for initialization
     void Start () {
@@ -23,12 +25,12 @@ public class Shot : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
+        cooldown -= Time.deltaTime;
         if (GameState.Instance.CurState == GameState.State.RoundInProgress ||
             GameState.Instance.CurState == GameState.State.StartRound ||
             GameState.Instance.CurState == GameState.State.EndRound)
         {
-            frameCount++;
-            
+                       
 
             Vector2 inputAxis = _input.aimAxis;
 
@@ -37,28 +39,34 @@ public class Shot : MonoBehaviour {
                 axis = inputAxis;
             }
             transform.parent.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(axis.y, axis.x) * Mathf.Rad2Deg + 64);
-            if (_input.fire > 0.2 && canShoot)
-            {
-                // Todo: Inpractical in case you press a the wrong time you to have wait a whole fireFrame before firering. Also, don't count frame, count second.
-            }
+
         }
 
         if (GameState.Instance.CurState == GameState.State.RoundInProgress)
         {
             GameObject bullet;
 
-            if (_input.fire > 0.2 && frameCount % fireRate == 0) // Todo: Inpractical in case you press a the wrong time you to have wait a whole fireFrame before firering. Also, don't count frame, count second.
+            if (_input.fire > 0.2 && !prevFireInput) // Todo: Inpractical in case you press a the wrong time you to have wait a whole fireFrame before firering. Also, don't count frame, count second.
             {
-                canShoot = false;
-                _anim.SetBool("isShooting", true);
-                bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
-                bullet.GetComponent<Bullet>().initialize(transform.right, _input.playerIndex);
-                Debug.LogError("SHOOOOOT");
-                AudioManager.instance.Play(Resources.Load<AudioClip>("Audio/shot"));
-            }
-            else if (frameCount % fireRate == 0) canShoot = true;
+                prevFireInput = true;
+                scheduledShot = true;
 
-            else _anim.SetBool("isShooting", false);
+                if (cooldown <= 0.0f && scheduledShot)
+                {
+                    bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+                    bullet.GetComponent<Bullet>().initialize(transform.right, _input.playerIndex);
+                    cooldown = fireRate;
+                    Debug.Log("SHOOOOOT");
+                    _anim.SetBool("isShooting", true);
+                   // AudioManager.instance.Play(Resources.Load<AudioClip>("Audio/shot"));
+                    
+                    scheduledShot = false;
+                }
+                else _anim.SetBool("isShooting", false);
+            }
+            else if (_input.fire < 0.2) prevFireInput = false;
+
+
         }
     }
 }
