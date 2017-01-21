@@ -7,8 +7,8 @@ using UnityEngine.UI;
 
 public class WaitInputMenuBehaviour : MonoBehaviour {
 
-    private bool player1Validation;
-    private bool player2Validation;
+    public bool player1Validation;
+    public bool player2Validation;
 
     public Image imagePlayer1;
     public Image imagePlayer2;

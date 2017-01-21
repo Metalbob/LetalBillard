@@ -27,6 +27,8 @@ public class Bullet : MonoBehaviour {
     public GameObject bounceEffect;
     public int index;
 
+    public WallParticleController.ParticleSetup[] particleByPlayer;
+
     private void Start()
     {
         StartCoroutine(decay(decayTime));
@@ -70,8 +72,12 @@ public class Bullet : MonoBehaviour {
             Vector3 norm = collision.contacts[0].normal;
             if (collision.collider.tag == ("Wall"))
             {
-                Instantiate(bounceEffect, collision.contacts[0].point, Quaternion.Euler(0, 0, Mathf.Atan2(norm.y, norm.x) * Mathf.Rad2Deg + 90));
+                Quaternion rot = Quaternion.Euler(0, 0, Mathf.Atan2(norm.y, norm.x) * Mathf.Rad2Deg + 90);
+                GameObject go = Instantiate(bounceEffect, collision.contacts[0].point, rot);
+                go.GetComponent<WallParticleController>().setup = particleByPlayer[index-1];
                 decayTime -= hitTimePenalty;
+                Debug.LogError("HIT");
+                AudioManager.instance.Play(Resources.Load<AudioClip>("Audio/rebond"));
             }
             
             initialize(Vector2.Reflect(velocity.normalized, norm), index);

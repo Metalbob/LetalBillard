@@ -28,6 +28,7 @@ public class GameState : MonoBehaviour
         StartGame,
         StartRound,
         RoundInProgress,
+        Pause,
         EndRound,
         EndGame,
     }
@@ -51,6 +52,8 @@ public class GameState : MonoBehaviour
     private int _nbrRound = 0;
     private int _scoreP1 = 0;
     private int _scoreP2 = 0;
+
+    private bool _isPause = false;
 
 
     private GameObject _player1 = null;
@@ -88,6 +91,17 @@ public class GameState : MonoBehaviour
     private void Start()
     {
         StartCoroutine(StartGame());
+    }
+
+    private void Update()
+    {
+        if (_curState == State.RoundInProgress || _curState == State.Pause)
+        {
+            if (Input.GetButtonDown("StartAll"))
+            {
+                PauseGame();
+            }
+        }
     }
 
     private IEnumerator StartGame()
@@ -131,7 +145,7 @@ public class GameState : MonoBehaviour
             {
                 _scoreP1++;
             }
-            else
+            else if (indexPlayer == 1)
             {
                 _scoreP2++;
             }
@@ -151,6 +165,25 @@ public class GameState : MonoBehaviour
             {
                 StartCoroutine(StartRound());
             }
+        }
+    }
+
+    public void PauseGame()
+    {
+        if (!_isPause)
+        {
+            _curState = State.Pause;
+            PanelState.Instance.PausePanel();
+            StopAllCoroutines();
+            _isPause = true;
+            Time.timeScale = 0;
+        }
+        else
+        {
+            RoundInProgress();
+            _isPause = false;
+            PanelState.Instance.EndRoundPanel();
+            Time.timeScale = 1;
         }
     }
 
