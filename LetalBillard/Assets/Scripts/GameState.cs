@@ -26,9 +26,10 @@ public class GameState : MonoBehaviour
     {
         None = 0,
         StartGame,
-        LoopGame,
+        StartRound,
+        RoundInProgress,
+        EndRound,
         EndGame,
-        Restart
     }
 
     [SerializeField]
@@ -44,16 +45,19 @@ public class GameState : MonoBehaviour
     public State CurState { get { return _curState; } set { _curState = value; } }
     private State _curState = State.None;
 
+    [SerializeField]
+    private int _scoreGoal = 3;
+
+    private int _nbrRound = 0;
+    private int _scoreP1 = 0;
+    private int _scoreP2 = 0;
+
+
     private GameObject _player1 = null;
     private GameObject _player2 = null;
 
     public GameObject Player1 { get { return _player1; } }
     public GameObject Player2 { get { return _player2; } }
-
-    private void Awake()
-    {
-        InitPosPlayer();
-    }
 
     private void InitPosPlayer()
     {
@@ -77,5 +81,73 @@ public class GameState : MonoBehaviour
             int randomPlayer2 = (int)Mathf.Floor(Random.value * _spawnPlayer2.Length);
             player.transform.position = _spawnPlayer2[randomPlayer2].transform.position;
         }
+    }
+
+    private void Start()
+    {
+        StartCoroutine(StartGame());
+    }
+
+    private IEnumerator StartGame()
+    {
+        Debug.Log("StartGame");
+
+        _curState = State.StartGame;
+
+        yield return new WaitForSeconds(3);
+
+        StartCoroutine(StartRound());
+    }
+
+    private IEnumerator StartRound()
+    {
+        Debug.Log("StartRound");
+        InitPosPlayer();
+
+        _curState = State.StartRound;
+
+        yield return new WaitForSeconds(3);
+        RoundInProgress();
+    }
+
+    private void RoundInProgress()
+    {
+        Debug.Log("RoundInProgress");
+
+        _curState = State.RoundInProgress;
+    }
+
+    public IEnumerator StopRound(int indexPlayer)
+    {
+        Debug.Log("EndRound");
+
+        _curState = State.EndRound;
+
+        if (indexPlayer == 0)
+        {
+            _scoreP1++;
+        }
+        else
+        {
+            _scoreP2++;
+        }
+
+        yield return new WaitForSeconds(3);
+
+        if (_scoreP1 >= _scoreGoal || _scoreP2 >= _scoreGoal)
+        {
+            EndGame();
+        }
+        else
+        {
+            StartCoroutine(StartRound());
+        }
+    }
+
+    public void EndGame()
+    {
+        Debug.Log("EndGame");
+
+        _curState = State.EndRound;
     }
 }

@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour {
     public int playerIndex = 0;
     public float speed = 10;
     public float dec = 0.01f;
+    public float deadPoint = 0.2f;
 
     private Rigidbody2D _rb;
     private Vector2 _vel;
@@ -39,7 +40,7 @@ public class PlayerController : MonoBehaviour {
         else axis = new Vector2(Input.GetAxis(horizontalAxisNameP2), Input.GetAxis(verticalAxisNameP2));
 
         _vel += Time.deltaTime * axis * speed;
-        if (_vel.x <= -0.2 || _vel.x >= 0.2 || _vel.y <= -0.2 || _vel.y >= 0.2) _anim.SetBool("isMoving", true);
+        if (_vel.x <= -deadPoint || _vel.x >= deadPoint || _vel.y <= -deadPoint || _vel.y >= deadPoint) _anim.SetBool("isMoving", true);
         else _anim.SetBool("isMoving", false);
     }
     private void OnCollisionEnter2D(Collision2D collision)
