@@ -30,7 +30,10 @@ public class PlayerController : MonoBehaviour {
 	
     void Update()
     {
-        move();
+        if (GameState.Instance.CurState == GameState.State.RoundInProgress)
+        {
+            move();
+        }
     }
 
     private void move()
@@ -53,12 +56,26 @@ public class PlayerController : MonoBehaviour {
         _anim.SetBool("isDead", true);
         yield return new WaitForSeconds(timeDead);
         _anim.SetBool("isDead", false);
-        GameState.Instance.respawn(this.gameObject);
+        //GameState.Instance.respawn(this.gameObject);
+        StartCoroutine(GameState.Instance.StopRound(playerIndex));
     }
 
     // Update is called once per frame
-    void FixedUpdate () {
-        _rb.velocity = _vel;
-        _vel *= Mathf.Pow(dec, Time.fixedDeltaTime);
+    void FixedUpdate ()
+    {
+        if (GameState.Instance.CurState == GameState.State.RoundInProgress)
+        {
+            _rb.velocity = _vel;
+            _vel *= Mathf.Pow(dec, Time.fixedDeltaTime);
+        }
+        
 	}
+
+    public void StopVelocityPlayer()
+    {
+        GetComponent<Rigidbody2D>().velocity = Vector3.zero;
+        GetComponent<Rigidbody2D>().angularVelocity = 0;
+        GetComponent<Rigidbody2D>().Sleep();
+        _anim.SetBool("isMoving", false);
+    }
 }

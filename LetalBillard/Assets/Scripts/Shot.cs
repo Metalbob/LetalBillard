@@ -25,36 +25,41 @@ public class Shot : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update() {
-        frameCount++;
-        GameObject bullet;
-        string horizontalAxisName;
-        string verticalAxisName;
-        string fire;
-        float atk;
-        if (_ctrl.playerIndex == 1)
+    void Update()
+    {
+        if (GameState.Instance.CurState == GameState.State.RoundInProgress)
         {
-            horizontalAxisName = horizontalAxisNameP1;
-            verticalAxisName = verticalAxisNameP1;
-            fire = fireP1;
-        }
-        else
-        {
-            horizontalAxisName = horizontalAxisNameP2;
-            verticalAxisName = verticalAxisNameP2;
-            fire = fireP2;
-        }
-        if (Input.GetAxis(horizontalAxisName) < -0.4 || Input.GetAxis(horizontalAxisName) > 0.4 || Input.GetAxis(verticalAxisName) < -0.4 || Input.GetAxis(verticalAxisName) > 0.4) axis = new Vector2(Input.GetAxis(horizontalAxisName), Input.GetAxis(verticalAxisName));
-        transform.parent.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(axis.y, axis.x) * Mathf.Rad2Deg + 64);
-        atk = Input.GetAxis(fire);
-        Debug.Log(atk);
-        if (atk > 0.2 && frameCount % fireRate == 0)
-        {
-             _anim.SetBool("isShooting", true);
-            bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
-            bullet.GetComponent<Bullet>().initialize(transform.right);
-        }
-        else _anim.SetBool("isShooting", false);
+            frameCount++;
+            GameObject bullet;
+            string horizontalAxisName;
+            string verticalAxisName;
+            string fire;
+            float atk;
 
+            if (_ctrl.playerIndex == 1)
+            {
+                horizontalAxisName = horizontalAxisNameP1;
+                verticalAxisName = verticalAxisNameP1;
+                fire = fireP1;
+            }
+            else
+            {
+                horizontalAxisName = horizontalAxisNameP2;
+                verticalAxisName = verticalAxisNameP2;
+                fire = fireP2;
+            }
+
+            if (Input.GetAxis(horizontalAxisName) < -0.4 || Input.GetAxis(horizontalAxisName) > 0.4 || Input.GetAxis(verticalAxisName) < -0.4 || Input.GetAxis(verticalAxisName) > 0.4) axis = new Vector2(Input.GetAxis(horizontalAxisName), Input.GetAxis(verticalAxisName));
+            transform.parent.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(axis.y, axis.x) * Mathf.Rad2Deg + 64);
+            atk = Input.GetAxis(fire);
+            Debug.Log(atk);
+            if (atk > 0.2 && frameCount % fireRate == 0)
+            {
+                _anim.SetBool("isShooting", true);
+                bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+                bullet.GetComponent<Bullet>().initialize(transform.right);
+            }
+            else _anim.SetBool("isShooting", false);
+    }
     }
 }
