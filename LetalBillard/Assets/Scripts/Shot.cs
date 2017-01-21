@@ -10,14 +10,12 @@ public class Shot : MonoBehaviour {
     private Vector2 axis;
     public GameObject bulletPrefab;
     private Animator _anim;
-    private PlayerController _ctrl;
     private int frameCount = 0;
     private PlayerInput _input;
 
     // Use this for initialization
     void Start () {
         _anim = transform.parent.gameObject.GetComponent<Animator>();
-        _ctrl = transform.parent.gameObject.GetComponent<PlayerController>();
         _input = GetComponentInParent<PlayerInput>();
     }
 
