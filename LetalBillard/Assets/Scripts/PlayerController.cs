@@ -76,5 +76,6 @@ public class PlayerController : MonoBehaviour {
         GetComponent<Rigidbody2D>().velocity = Vector3.zero;
         GetComponent<Rigidbody2D>().angularVelocity = 0;
         GetComponent<Rigidbody2D>().Sleep();
+        _anim.SetBool("isMoving", false);
     }
 }
