@@ -14,6 +14,8 @@ public class Bullet : MonoBehaviour {
     private Vector2 deathPos;
     private Vector3 velocity;
     public GameObject dieAnim;
+
+    public GameObject bounceEffect;
 	
 
     
@@ -36,7 +38,14 @@ public class Bullet : MonoBehaviour {
             Destroy(this.gameObject);
         } else
         {
-            initialize(Vector2.Reflect(velocity.normalized, collision.contacts[0].normal));
+            Debug.Log(collision.collider.tag);
+            Vector3 norm = collision.contacts[0].normal;
+            if (collision.collider.tag == ("Wall"))
+            {
+                Instantiate(bounceEffect, collision.contacts[0].point, Quaternion.Euler(0, 0, Mathf.Atan2(norm.y, norm.x) * Mathf.Rad2Deg + 90));
+            }
+            
+            initialize(Vector2.Reflect(velocity.normalized, norm));
         }
     }
 
