@@ -42,7 +42,11 @@ public class PlayerController : MonoBehaviour {
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Bullet") StartCoroutine(death(1.0f));
+        if (collision.gameObject.GetComponent<Bullet>() != null)
+        {
+            if (collision.gameObject.GetComponent<Bullet>().index != GetComponent<PlayerInput>().playerIndex)
+                StartCoroutine(death(1.0f));
+        }
     }
 
     IEnumerator death(float timeDead)

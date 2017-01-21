@@ -15,7 +15,7 @@ public class bulletSpawn : MonoBehaviour {
 	void Update () {
         if (Input.GetKeyDown("space")) {
             instance = Instantiate(bullet, new Vector3(8, 0, 0), Quaternion.identity) as GameObject;
-            instance.GetComponent<Bullet>().initialize(new Vector3((float)0.6, (float)0.8));
+            instance.GetComponent<Bullet>().initialize(new Vector3((float)0.6, (float)0.8), 1);
         }
 	}
 }

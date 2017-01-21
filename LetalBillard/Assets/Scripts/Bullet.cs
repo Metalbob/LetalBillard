@@ -25,6 +25,7 @@ public class Bullet : MonoBehaviour {
     public GameObject dieAnim;
     private Rigidbody2D _rgbg2D;
     public GameObject bounceEffect;
+    public int index;
 
     private void Start()
     {
@@ -47,18 +48,18 @@ public class Bullet : MonoBehaviour {
     /// 
     /// </summary>
     /// <param name="pForwardSource"></param>
-    public void initialize(Vector3 pForwardSource)
+    public void initialize(Vector3 pForwardSource, int pIndex)
     {
         float lVelocityX = pForwardSource.x * SPEED;
         float lVelocityY = pForwardSource.y * SPEED;
         velocity = new Vector3(lVelocityX, lVelocityY);
         GetComponent<Rigidbody2D>().velocity = velocity;
+        index = pIndex;
     }
     
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        
         bounceCount++;
         if (bounceCount == bounceMax)
         {
@@ -73,7 +74,7 @@ public class Bullet : MonoBehaviour {
                 decayTime -= hitTimePenalty;
             }
             
-            initialize(Vector2.Reflect(velocity.normalized, norm));
+            initialize(Vector2.Reflect(velocity.normalized, norm), index);
         }
     }
 
