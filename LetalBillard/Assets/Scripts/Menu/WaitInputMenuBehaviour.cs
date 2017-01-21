@@ -13,23 +13,28 @@ public class WaitInputMenuBehaviour : MonoBehaviour {
     public Image imagePlayer1;
     public Image imagePlayer2;
     public Button backButton;
+    public Sprite buttonPressed;
+    public Sprite buttonUp;
     
     void Update ()
     {
 		if (Input.GetButtonDown("Submit_Player1"))
         {
             player1Validation = true;
-            imagePlayer1.color = Color.green;
+            imagePlayer1.sprite = buttonPressed;
+            AudioManager.instance.Play(Resources.Load<AudioClip>("Audio/valid"));
         }
         if (Input.GetButtonDown("Submit_Player2"))
         {
             player2Validation = true;
-            imagePlayer2.color = Color.green;
+            imagePlayer2.sprite = buttonPressed;
+            AudioManager.instance.Play(Resources.Load<AudioClip>("Audio/valid"));
         }
+
         if (Input.GetButtonDown("Cancel"))
         {
             player1Validation = player2Validation = false;
-            imagePlayer1.color = imagePlayer2.color = Color.white;
+            imagePlayer1.sprite = imagePlayer2.sprite = buttonUp;
             backButton.onClick.Invoke();
         }
 
