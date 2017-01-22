@@ -98,6 +98,8 @@ public class GameState : MonoBehaviour
     {
         if (previousLD != -1)
             LDs[previousLD].SetActive(false);
+        _scoreP1 = 0;
+        _scoreP2 = 0;
         previousLD = Random.Range(0, LDs.Length);
         LDs[previousLD].SetActive(true);
         _curState = State.StartGame;
@@ -201,9 +203,10 @@ public class GameState : MonoBehaviour
 
     public void EndGame()
     {
-
+        KillCam.Reset();
+        Debug.Log("qùkFmùwdfkDSnfkDjfkm!");
         _curState = State.EndGame;
-        PanelState.Instance.EndRoundPanel();
+        PanelState.Instance.EndGamePanel();
 
         StartCoroutine(RestartGame());
     }
@@ -211,6 +214,6 @@ public class GameState : MonoBehaviour
     private IEnumerator RestartGame()
     {
         yield return new WaitForSeconds(2);
-        StartGame();
+        StartCoroutine(StartGame());
     }
 }
