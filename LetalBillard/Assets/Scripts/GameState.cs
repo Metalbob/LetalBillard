@@ -38,10 +38,8 @@ public class GameState : MonoBehaviour
     [SerializeField]
     private GameObject _prefabPlayer2 = null;
 
-    [SerializeField]
-    private GameObject[] _spawnPlayer1;
-    [SerializeField]
-    private GameObject[] _spawnPlayer2;
+    private GameObject _spawnPlayer1;
+    private GameObject _spawnPlayer2;
 
     [SerializeField]
     private GameObject[] LDs;
@@ -70,28 +68,14 @@ public class GameState : MonoBehaviour
 
     private void InitPosPlayer()
     {
-        int randomPlayer1 = (int)Mathf.Floor(Random.value * _spawnPlayer1.Length);
-        int randomPlayer2 = (int)Mathf.Floor(Random.value * _spawnPlayer2.Length);
-        _player1 = Instantiate(_prefabPlayer1, _spawnPlayer1[randomPlayer1].transform.position, _spawnPlayer1[randomPlayer1].transform.rotation * Quaternion.Euler(0, 0, 64)) as GameObject;
+        //int randomPlayer1 = (int)Mathf.Floor(Random.value * _spawnPlayer1.Length);
+        //int randomPlayer2 = (int)Mathf.Floor(Random.value * _spawnPlayer2.Length);
+        _spawnPlayer1 = GameObject.FindGameObjectWithTag("SpawnP1");
+        _spawnPlayer2 = GameObject.FindGameObjectWithTag("SpawnP2");
+        _player1 = Instantiate(_prefabPlayer1, _spawnPlayer1.transform.position, _spawnPlayer1.transform.rotation * Quaternion.Euler(0, 0, 64)) as GameObject;
         _player1.GetComponent<PlayerInput>().playerIndex = 1;
-        _player2 = Instantiate(_prefabPlayer2, _spawnPlayer2[randomPlayer2].transform.position, _spawnPlayer2[randomPlayer2].transform.rotation * Quaternion.Euler(0, 0, 64)) as GameObject;
+        _player2 = Instantiate(_prefabPlayer2, _spawnPlayer2.transform.position, _spawnPlayer2.transform.rotation * Quaternion.Euler(0, 0, 64)) as GameObject;
         _player2.GetComponent<PlayerInput>().playerIndex = 2;
-    }
-
-  
-
-    public void respawn(GameObject player)
-    {
-        if(player.GetComponent<PlayerInput>().playerIndex == 1)
-        {
-            int randomPlayer1 = (int)Mathf.Floor(Random.value * _spawnPlayer1.Length);
-            player.transform.position = _spawnPlayer1[randomPlayer1].transform.position;
-        }
-        else
-        {
-            int randomPlayer2 = (int)Mathf.Floor(Random.value * _spawnPlayer2.Length);
-            player.transform.position = _spawnPlayer2[randomPlayer2].transform.position;
-        }
     }
 
     private void Start()
