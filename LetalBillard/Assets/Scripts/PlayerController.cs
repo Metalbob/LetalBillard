@@ -53,6 +53,8 @@ public class PlayerController : MonoBehaviour {
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (GameState.Instance.CurState != GameState.State.RoundInProgress)
+            return;
         if (collision.gameObject.GetComponent<Bullet>() != null)
         {
             if (collision.gameObject.GetComponent<Bullet>().index != GetComponent<PlayerInput>().playerIndex)
