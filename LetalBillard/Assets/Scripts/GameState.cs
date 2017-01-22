@@ -38,10 +38,12 @@ public class GameState : MonoBehaviour
     [SerializeField]
     private GameObject _prefabPlayer2 = null;
 
+    private GameObject _spawnPlayer1;
+    private GameObject _spawnPlayer2;
+
     [SerializeField]
-    private GameObject[] _spawnPlayer1;
-    [SerializeField]
-    private GameObject[] _spawnPlayer2;
+    private GameObject[] LDs;
+    private int previousLD = -1;
 
     public State CurState { get { return _curState; } set { _curState = value; } }
     private State _curState = State.None;
@@ -59,33 +61,21 @@ public class GameState : MonoBehaviour
     private GameObject _player1 = null;
     private GameObject _player2 = null;
 
+    public ScoreMenu scoreMenu;
+
     public GameObject Player1 { get { return _player1; } }
     public GameObject Player2 { get { return _player2; } }
 
     private void InitPosPlayer()
     {
-        int randomPlayer1 = (int)Mathf.Floor(Random.value * _spawnPlayer1.Length);
-        int randomPlayer2 = (int)Mathf.Floor(Random.value * _spawnPlayer2.Length);
-        _player1 = Instantiate(_prefabPlayer1, _spawnPlayer1[randomPlayer1].transform.position, _spawnPlayer1[randomPlayer1].transform.rotation * Quaternion.Euler(0, 0, 64)) as GameObject;
+        //int randomPlayer1 = (int)Mathf.Floor(Random.value * _spawnPlayer1.Length);
+        //int randomPlayer2 = (int)Mathf.Floor(Random.value * _spawnPlayer2.Length);
+        _spawnPlayer1 = GameObject.FindGameObjectWithTag("SpawnP1");
+        _spawnPlayer2 = GameObject.FindGameObjectWithTag("SpawnP2");
+        _player1 = Instantiate(_prefabPlayer1, _spawnPlayer1.transform.position, _spawnPlayer1.transform.rotation * Quaternion.Euler(0, 0, 64)) as GameObject;
         _player1.GetComponent<PlayerInput>().playerIndex = 1;
-        _player2 = Instantiate(_prefabPlayer2, _spawnPlayer2[randomPlayer2].transform.position, _spawnPlayer2[randomPlayer2].transform.rotation * Quaternion.Euler(0, 0, 64)) as GameObject;
+        _player2 = Instantiate(_prefabPlayer2, _spawnPlayer2.transform.position, _spawnPlayer2.transform.rotation * Quaternion.Euler(0, 0, 64)) as GameObject;
         _player2.GetComponent<PlayerInput>().playerIndex = 2;
-    }
-
-  
-
-    public void respawn(GameObject player)
-    {
-        if(player.GetComponent<PlayerInput>().playerIndex == 1)
-        {
-            int randomPlayer1 = (int)Mathf.Floor(Random.value * _spawnPlayer1.Length);
-            player.transform.position = _spawnPlayer1[randomPlayer1].transform.position;
-        }
-        else
-        {
-            int randomPlayer2 = (int)Mathf.Floor(Random.value * _spawnPlayer2.Length);
-            player.transform.position = _spawnPlayer2[randomPlayer2].transform.position;
-        }
     }
 
     private void Start()
@@ -107,9 +97,11 @@ public class GameState : MonoBehaviour
     private IEnumerator StartGame()
     {
 
+        previousLD = Random.Range(0, LDs.Length);
+        LDs[previousLD].SetActive(true);
         _curState = State.StartGame;
         PanelState.Instance.StartGamePanel();
-
+        
         yield return new WaitForSeconds(3);
 
         StartCoroutine(StartRound());
@@ -118,12 +110,12 @@ public class GameState : MonoBehaviour
     private IEnumerator StartRound()
     {
         InitPosPlayer();
-
+        KillCam.Reset();
         _nbrRound++;
 
         _curState = State.StartRound;
         PanelState.Instance.StartRoundPanel();
-
+        
         yield return new WaitForSeconds(3);
         RoundInProgress();
     }
@@ -143,9 +135,13 @@ public class GameState : MonoBehaviour
             _player1.GetComponent<PlayerController>().StopVelocityPlayer();
             _player2.GetComponent<PlayerController>().StopVelocityPlayer();
 
+            int oldScoreP1 = _scoreP1;
+            int oldScoreP2 = _scoreP2;
+
             if (indexPlayer == 1)
             {
                 _scoreP2++;
+                
             }
             else if (indexPlayer == 2)
             {
@@ -154,10 +150,12 @@ public class GameState : MonoBehaviour
 
             _curState = State.EndRound;
             PanelState.Instance.EndRoundPanel();
-
+            scoreMenu.PlayAnim(oldScoreP1, _scoreP1 - oldScoreP1, oldScoreP2, _scoreP2 - oldScoreP2);
             yield return new WaitForSeconds(2);
 
             DestroyAllPlayers();
+
+           
 
             if (_scoreP1 >= _scoreGoal || _scoreP2 >= _scoreGoal)
             {
@@ -165,6 +163,9 @@ public class GameState : MonoBehaviour
             }
             else
             {
+                LDs[previousLD].SetActive(false);
+                previousLD = Random.Range(0, LDs.Length);
+                LDs[previousLD].SetActive(true);
                 StartCoroutine(StartRound());
             }
         }
@@ -191,8 +192,13 @@ public class GameState : MonoBehaviour
 
     public void DestroyAllPlayers()
     {
+
         Destroy(_player1);
         Destroy(_player2);
+
+        GameObject[] dest = GameObject.FindGameObjectsWithTag("ToDestroy");
+        foreach (var des in dest)
+            Destroy(des);
     }
 
     public void EndGame()

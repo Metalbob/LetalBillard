@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour {
     private Animator _anim;
     private PlayerInput _input;
 
+    public bool _isDead = false;
+
     [SerializeField]
     private float rumbleTime = 1.0f;
     [SerializeField]
@@ -30,9 +32,10 @@ public class PlayerController : MonoBehaviour {
 	
     void Update()
     {
-        if (GameState.Instance.CurState == GameState.State.RoundInProgress ||
+        if ((GameState.Instance.CurState == GameState.State.RoundInProgress ||
             GameState.Instance.CurState == GameState.State.StartRound ||
-            GameState.Instance.CurState == GameState.State.EndRound)
+            GameState.Instance.CurState == GameState.State.EndRound) &&
+            !_isDead)
         {
             move();
         }
@@ -53,19 +56,27 @@ public class PlayerController : MonoBehaviour {
         if (collision.gameObject.GetComponent<Bullet>() != null)
         {
             if (collision.gameObject.GetComponent<Bullet>().index != GetComponent<PlayerInput>().playerIndex)
+            {
+                _isDead = true;
+                GetComponent<BoxCollider2D>().enabled = false;
+                SlowMotion.SlowMo(3.0f, 0.1f);
+                _anim.SetBool("isDead", true);
+                _anim.SetFloat("deathAnimSpeed", 10);
+                AudioManager.instance.Play(Resources.Load<AudioClip>("Audio/dead"));
+                Rumble(rumbleTime, vibrationStrength);
+                KillCam.target = transform;
                 StartCoroutine(death(1.0f));
+            }
         }
     }
 
     IEnumerator death(float timeDead)
     {
-        SlowMotion.instance.SlowMo(timeDead, 0.1f);
-        _anim.SetBool("isDead", true);
-        AudioManager.instance.Play(Resources.Load<AudioClip>("Audio/dead"));
-        Rumble(rumbleTime, vibrationStrength);
-        yield return new WaitForSeconds(timeDead);
-        _anim.SetBool("isDead", false);
+
+        //yield return new WaitForSeconds(timeDead);
+        //_anim.SetBool("isDead", false);
         //GameState.Instance.respawn(this.gameObject);
+        yield return null;
         StartCoroutine(GameState.Instance.StopRound(_input.playerIndex));
     }
 
@@ -76,17 +87,22 @@ public class PlayerController : MonoBehaviour {
 
     IEnumerator RumbleEnum(float time, float strength)
     {
-        GamePad.SetVibration((PlayerIndex)(GamePadManager.instance.gamePadAssoc[_input.playerIndex]), strength, strength);
-        yield return new WaitForSeconds(time);
-        GamePad.SetVibration((PlayerIndex)(GamePadManager.instance.gamePadAssoc[_input.playerIndex]), 0, 0);
+        if (GamePadManager.instance.gamePadAssoc.ContainsKey(_input.playerIndex))
+        {
+            GamePad.SetVibration((PlayerIndex)(GamePadManager.instance.gamePadAssoc[_input.playerIndex]), strength, strength);
+            yield return new WaitForSeconds(time);
+            GamePad.SetVibration((PlayerIndex)(GamePadManager.instance.gamePadAssoc[_input.playerIndex]), 0, 0);
+
+        }
     }
 
     // Update is called once per frame
     void FixedUpdate ()
     {
-        if (GameState.Instance.CurState == GameState.State.RoundInProgress ||
+        if ((GameState.Instance.CurState == GameState.State.RoundInProgress ||
             GameState.Instance.CurState == GameState.State.StartRound ||
-            GameState.Instance.CurState == GameState.State.EndRound)
+            GameState.Instance.CurState == GameState.State.EndRound) &&
+            !_isDead)
         {
             _rb.velocity = _vel;
             _vel *= Mathf.Pow(dec, Time.fixedDeltaTime);
