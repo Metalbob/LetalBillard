@@ -15,6 +15,9 @@ public class PlayerController : MonoBehaviour {
     private Animator _anim;
     private PlayerInput _input;
 
+    public GameObject Halo;
+    public GameObject Cam;
+
     public bool _isDead = false;
 
     [SerializeField]
@@ -67,6 +70,8 @@ public class PlayerController : MonoBehaviour {
                 AudioManager.instance.Play(Resources.Load<AudioClip>("Audio/dead"));
                 Rumble(rumbleTime, vibrationStrength);
                 KillCam.target = transform;
+                Destroy(Halo);
+                Destroy(Cam);
                 StartCoroutine(death(1.0f));
             }
         }
