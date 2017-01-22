@@ -46,15 +46,18 @@ public class PlayerController : MonoBehaviour {
         if (collision.gameObject.GetComponent<Bullet>() != null)
         {
             if (collision.gameObject.GetComponent<Bullet>().index != GetComponent<PlayerInput>().playerIndex)
-                StartCoroutine(death(1.0f));
+            {
+                _anim.SetBool("isDead", true);
+                StartCoroutine(death(0.5f));
+            }
         }
     }
 
     IEnumerator death(float timeDead)
     {
-        _anim.SetBool("isDead", true);
+        
         yield return new WaitForSeconds(timeDead);
-        _anim.SetBool("isDead", false);
+        _anim.Stop();
         //GameState.Instance.respawn(this.gameObject);
         StartCoroutine(GameState.Instance.StopRound(_input.playerIndex));
     }
