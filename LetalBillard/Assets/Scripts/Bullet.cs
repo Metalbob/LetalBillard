@@ -63,7 +63,6 @@ public class Bullet : MonoBehaviour {
     private void OnCollisionEnter2D(Collision2D collision)
     {
         bounceCount++;
-        Debug.Log(bounceCount);
         if (bounceCount == bounceMax)
         {
             deathPos = transform.position;
@@ -74,15 +73,13 @@ public class Bullet : MonoBehaviour {
             Vector3 norm = collision.contacts[0].normal;
             if (collision.collider.tag == ("Wall"))
             {
-                Debug.Log("hahahahaaaaaaaaaaaaaa");
                 Quaternion rot = Quaternion.Euler(0, 0, Mathf.Atan2(norm.y, norm.x) * Mathf.Rad2Deg + 90);
                 GameObject go = Instantiate(bounceEffect, collision.contacts[0].point, rot);
                 go.GetComponent<WallParticleController>().setup = particleByPlayer[index-1];
                 decayTime -= hitTimePenalty;
-                //Debug.LogError("HIT");
-                //AudioManager.instance.Play(Resources.Load<AudioClip>("Audio/rebond"));
+                Screenshake.FrameShake(norm);
+                AudioManager.instance.Play(Resources.Load<AudioClip>("Audio/rebond"));
             }
-            Debug.Log(velocity.normalized);
             initialize(Vector2.Reflect(velocity.normalized, norm), index);
         }
     }

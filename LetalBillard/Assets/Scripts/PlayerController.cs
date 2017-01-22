@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour {
     public float dec = 0.01f;
     public float deadPoint = 0.2f;
 
+    public bool isDead = false;
+
     private Rigidbody2D _rb;
     private Vector2 _vel;
     private Animator _anim;
@@ -25,7 +27,8 @@ public class PlayerController : MonoBehaviour {
     {
         if (GameState.Instance.CurState == GameState.State.RoundInProgress ||
             GameState.Instance.CurState == GameState.State.StartRound ||
-            GameState.Instance.CurState == GameState.State.EndRound)
+            GameState.Instance.CurState == GameState.State.EndRound ||
+            !isDead)
         {
             move();
         }
@@ -46,28 +49,28 @@ public class PlayerController : MonoBehaviour {
         if (collision.gameObject.GetComponent<Bullet>() != null)
         {
             if (collision.gameObject.GetComponent<Bullet>().index != GetComponent<PlayerInput>().playerIndex)
-            {
-                _anim.SetBool("isDead", true);
-                StartCoroutine(death(0.5f));
-            }
+                StartCoroutine(death(1.0f));
         }
     }
 
     IEnumerator death(float timeDead)
     {
-        
+        isDead = true;
+        _anim.SetBool("isDead", true);
         yield return new WaitForSeconds(timeDead);
-        _anim.Stop();
+        _anim.SetBool("isDead", false);
         //GameState.Instance.respawn(this.gameObject);
         StartCoroutine(GameState.Instance.StopRound(_input.playerIndex));
     }
+
 
     // Update is called once per frame
     void FixedUpdate ()
     {
         if (GameState.Instance.CurState == GameState.State.RoundInProgress ||
             GameState.Instance.CurState == GameState.State.StartRound ||
-            GameState.Instance.CurState == GameState.State.EndRound)
+            GameState.Instance.CurState == GameState.State.EndRound ||
+            !isDead)
         {
             _rb.velocity = _vel;
             _vel *= Mathf.Pow(dec, Time.fixedDeltaTime);
