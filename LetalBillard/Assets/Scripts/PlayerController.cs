@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour {
     public float dec = 0.01f;
     public float deadPoint = 0.2f;
 
+    public bool isDead = false;
+
     private Rigidbody2D _rb;
     private Vector2 _vel;
     private Animator _anim;
@@ -25,7 +27,8 @@ public class PlayerController : MonoBehaviour {
     {
         if (GameState.Instance.CurState == GameState.State.RoundInProgress ||
             GameState.Instance.CurState == GameState.State.StartRound ||
-            GameState.Instance.CurState == GameState.State.EndRound)
+            GameState.Instance.CurState == GameState.State.EndRound ||
+            !isDead)
         {
             move();
         }
@@ -52,6 +55,7 @@ public class PlayerController : MonoBehaviour {
 
     IEnumerator death(float timeDead)
     {
+        isDead = true;
         _anim.SetBool("isDead", true);
         yield return new WaitForSeconds(timeDead);
         _anim.SetBool("isDead", false);
@@ -64,7 +68,8 @@ public class PlayerController : MonoBehaviour {
     {
         if (GameState.Instance.CurState == GameState.State.RoundInProgress ||
             GameState.Instance.CurState == GameState.State.StartRound ||
-            GameState.Instance.CurState == GameState.State.EndRound)
+            GameState.Instance.CurState == GameState.State.EndRound ||
+            !isDead)
         {
             _rb.velocity = _vel;
             _vel *= Mathf.Pow(dec, Time.fixedDeltaTime);

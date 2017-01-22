@@ -28,7 +28,8 @@ public class Shot : MonoBehaviour {
         cooldown -= Time.deltaTime;
         if (GameState.Instance.CurState == GameState.State.RoundInProgress ||
             GameState.Instance.CurState == GameState.State.StartRound ||
-            GameState.Instance.CurState == GameState.State.EndRound)
+            GameState.Instance.CurState == GameState.State.EndRound ||
+            !GetComponentInParent<PlayerController>().isDead)
         {
                        
 
