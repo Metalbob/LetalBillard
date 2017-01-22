@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using XInputDotNetPure;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerController : MonoBehaviour {
@@ -13,6 +14,12 @@ public class PlayerController : MonoBehaviour {
     private Vector2 _vel;
     private Animator _anim;
     private PlayerInput _input;
+
+    [SerializeField]
+    private float rumbleTime = 1.0f;
+    [SerializeField]
+    [Range(0, 1)]
+    private float vibrationStrength = 1.0f;
 
     // Use this for initialization
     void Start () {
@@ -52,11 +59,28 @@ public class PlayerController : MonoBehaviour {
 
     IEnumerator death(float timeDead)
     {
+        SlowMotion.instance.SlowMo(timeDead, 0.1f);
         _anim.SetBool("isDead", true);
+        AudioManager.instance.Play(Resources.Load<AudioClip>("Audio/dead"));
+        Rumble(rumbleTime, vibrationStrength);
         yield return new WaitForSeconds(timeDead);
         _anim.SetBool("isDead", false);
         //GameState.Instance.respawn(this.gameObject);
         StartCoroutine(GameState.Instance.StopRound(_input.playerIndex));
+    }
+
+    public void Rumble(float time, float strength)
+    {
+        StartCoroutine(RumbleEnum(time, strength));
+    }
+
+    IEnumerator RumbleEnum(float time, float strength)
+    {
+        GamePadState state = GamePad.GetState((PlayerIndex)0);
+        GamePad.SetVibration((PlayerIndex)(_input.playerIndex - 1), strength, strength);
+
+        yield return new WaitForSeconds(time);
+        GamePad.SetVibration((PlayerIndex)(_input.playerIndex - 1), 0, 0);
     }
 
     // Update is called once per frame

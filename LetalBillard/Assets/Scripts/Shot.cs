@@ -56,9 +56,9 @@ public class Shot : MonoBehaviour {
                     bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
                     bullet.GetComponent<Bullet>().initialize(transform.right, _input.playerIndex);
                     cooldown = fireRate;
-                    Debug.Log("SHOOOOOT");
                     _anim.SetBool("isShooting", true);
-                   // AudioManager.instance.Play(Resources.Load<AudioClip>("Audio/shot"));
+                    AudioManager.instance.Play(Resources.Load<AudioClip>("Audio/shot"));
+                    Debug.LogError(Input.GetJoystickNames()[_input.playerIndex - 1]);
                     
                     scheduledShot = false;
                 }
