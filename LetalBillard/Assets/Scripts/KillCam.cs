@@ -31,19 +31,23 @@ public class KillCam : MonoBehaviour {
 
     public static void Reset()
     {
-        instance.cam.position = instance.originalPos;
-        instance.main.orthographicSize = instance.originalSize;
-        target = null;
+        if (instance != null)
+        {
+            instance.cam.position = instance.originalPos;
+            instance.main.orthographicSize = instance.originalSize;
+            target = null;
+        }
+        
     }
 	
 	// Update is called once per frame
 	void Update () {
 		if (target != null)
         {
-            var pt = Vector3.Lerp(cam.position, target.position, Time.deltaTime * lerpForce);
+            var pt = Vector3.Lerp(cam.position, target.position, Time.unscaledDeltaTime * lerpForce);
             pt.z = originalPos.z;
             cam.position = pt;
-            main.orthographicSize = Mathf.Lerp(main.orthographicSize, targetScale, Time.deltaTime * scaleLerpForce);
+            main.orthographicSize = Mathf.Lerp(main.orthographicSize, targetScale, Time.unscaledDeltaTime * scaleLerpForce);
         }
 	}
 }
