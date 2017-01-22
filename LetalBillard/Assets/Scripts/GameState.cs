@@ -63,6 +63,8 @@ public class GameState : MonoBehaviour
     private GameObject _player1 = null;
     private GameObject _player2 = null;
 
+    public ScoreMenu scoreMenu;
+
     public GameObject Player1 { get { return _player1; } }
     public GameObject Player2 { get { return _player2; } }
 
@@ -149,9 +151,13 @@ public class GameState : MonoBehaviour
             _player1.GetComponent<PlayerController>().StopVelocityPlayer();
             _player2.GetComponent<PlayerController>().StopVelocityPlayer();
 
+            int oldScoreP1 = _scoreP1;
+            int oldScoreP2 = _scoreP2;
+
             if (indexPlayer == 1)
             {
                 _scoreP2++;
+                
             }
             else if (indexPlayer == 2)
             {
@@ -160,7 +166,7 @@ public class GameState : MonoBehaviour
 
             _curState = State.EndRound;
             PanelState.Instance.EndRoundPanel();
-
+            scoreMenu.PlayAnim(oldScoreP1, _scoreP1 - oldScoreP1, oldScoreP2, _scoreP2 - oldScoreP2);
             yield return new WaitForSeconds(2);
 
             DestroyAllPlayers();

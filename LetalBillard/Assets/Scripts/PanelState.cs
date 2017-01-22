@@ -95,4 +95,5 @@ public class PanelState : MonoBehaviour
         EndGame.SetActive(false);
     }
 
+
 }
