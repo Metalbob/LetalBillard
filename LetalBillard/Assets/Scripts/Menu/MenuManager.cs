@@ -8,6 +8,7 @@ public class MenuManager : MonoBehaviour {
     public GameObject menuContainer;
     public GameObject waitInputMenuContainer;
     public GameObject confirmQuitContainer;
+    public GameObject creditsContainer;
     public Button defaultSelectedMainMenu;
     public Button defaultSelectedQuitMenu;
     public AudioClip buttonClip;
@@ -37,6 +38,18 @@ public class MenuManager : MonoBehaviour {
         confirmQuitContainer.SetActive(true);
         defaultSelectedQuitMenu.Select();
         AudioManager.instance.Play(buttonClip);
+    }
+
+    public void ShowCredits()
+    {
+        menuContainer.SetActive(false);
+        creditsContainer.SetActive(true);
+    }
+
+    public void CloseCredits()
+    {
+        creditsContainer.SetActive(false);
+        menuContainer.SetActive(true);
     }
 
     public void CloseConfirmMenu()
