@@ -77,7 +77,7 @@ public class Bullet : MonoBehaviour {
                 GameObject go = Instantiate(bounceEffect, collision.contacts[0].point, rot);
                 go.GetComponent<WallParticleController>().setup = particleByPlayer[index-1];
                 decayTime -= hitTimePenalty;
-
+                Screenshake.FrameShake(norm);
                 AudioManager.instance.Play(Resources.Load<AudioClip>("Audio/rebond"));
             }
             initialize(Vector2.Reflect(velocity.normalized, norm), index);
