@@ -43,6 +43,10 @@ public class GameState : MonoBehaviour
     [SerializeField]
     private GameObject[] _spawnPlayer2;
 
+    [SerializeField]
+    private GameObject[] LDs;
+    private int previousLD = -1;
+
     public State CurState { get { return _curState; } set { _curState = value; } }
     private State _curState = State.None;
 
@@ -107,6 +111,8 @@ public class GameState : MonoBehaviour
     private IEnumerator StartGame()
     {
 
+        previousLD = Random.Range(0, LDs.Length);
+        LDs[previousLD].SetActive(true);
         _curState = State.StartGame;
         PanelState.Instance.StartGamePanel();
 
@@ -140,8 +146,8 @@ public class GameState : MonoBehaviour
 
         if (_curState == State.RoundInProgress)
         {
-            //_player1.GetComponent<PlayerController>().StopVelocityPlayer();
-            //_player2.GetComponent<PlayerController>().StopVelocityPlayer();
+            _player1.GetComponent<PlayerController>().StopVelocityPlayer();
+            _player2.GetComponent<PlayerController>().StopVelocityPlayer();
 
             if (indexPlayer == 1)
             {
@@ -159,12 +165,17 @@ public class GameState : MonoBehaviour
 
             DestroyAllPlayers();
 
+           
+
             if (_scoreP1 >= _scoreGoal || _scoreP2 >= _scoreGoal)
             {
                 EndGame();
             }
             else
             {
+                LDs[previousLD].SetActive(false);
+                previousLD = Random.Range(0, LDs.Length);
+                LDs[previousLD].SetActive(true);
                 StartCoroutine(StartRound());
             }
         }
