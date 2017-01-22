@@ -140,8 +140,8 @@ public class GameState : MonoBehaviour
 
         if (_curState == State.RoundInProgress)
         {
-            _player1.GetComponent<PlayerController>().StopVelocityPlayer();
-            _player2.GetComponent<PlayerController>().StopVelocityPlayer();
+            //_player1.GetComponent<PlayerController>().StopVelocityPlayer();
+            //_player2.GetComponent<PlayerController>().StopVelocityPlayer();
 
             if (indexPlayer == 1)
             {
@@ -191,8 +191,13 @@ public class GameState : MonoBehaviour
 
     public void DestroyAllPlayers()
     {
+
         Destroy(_player1);
         Destroy(_player2);
+
+        GameObject[] dest = GameObject.FindGameObjectsWithTag("ToDestroy");
+        foreach (var des in dest)
+            Destroy(des);
     }
 
     public void EndGame()

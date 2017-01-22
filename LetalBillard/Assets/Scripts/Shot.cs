@@ -26,10 +26,10 @@ public class Shot : MonoBehaviour {
     void Update()
     {
         cooldown -= Time.deltaTime;
-        if (GameState.Instance.CurState == GameState.State.RoundInProgress ||
+        if ((GameState.Instance.CurState == GameState.State.RoundInProgress ||
             GameState.Instance.CurState == GameState.State.StartRound ||
-            GameState.Instance.CurState == GameState.State.EndRound ||
-            !GetComponentInParent<PlayerController>().isDead)
+            GameState.Instance.CurState == GameState.State.EndRound) &&
+            !GetComponentInParent<PlayerController>()._isDead)
         {
                        
 
@@ -43,13 +43,14 @@ public class Shot : MonoBehaviour {
 
         }
 
-        if (GameState.Instance.CurState == GameState.State.RoundInProgress)
+        if (GameState.Instance.CurState == GameState.State.RoundInProgress &&
+            !GetComponentInParent<PlayerController>()._isDead)
         {
             GameObject bullet;
 
-            if (_input.fire > 0.2) // Todo: Inpractical in case you press a the wrong time you to have wait a whole fireFrame before firering. Also, don't count frame, count second.
+            if (_input.fire > 0.2 && !prevFireInput) // Todo: Inpractical in case you press a the wrong time you to have wait a whole fireFrame before firering. Also, don't count frame, count second.
             {
-               // prevFireInput = true;
+                prevFireInput = true;
                 scheduledShot = true;
 
                 if (cooldown <= 0.0f && scheduledShot)
@@ -59,13 +60,12 @@ public class Shot : MonoBehaviour {
                     cooldown = fireRate;
                     _anim.SetBool("isShooting", true);
                     AudioManager.instance.Play(Resources.Load<AudioClip>("Audio/shot"));
-                    //Debug.LogError(Input.GetJoystickNames()[_input.playerIndex - 1]);
                     
                     scheduledShot = false;
                 }
                 else _anim.SetBool("isShooting", false);
             }
-          //  else if (_input.fire < 0.2) prevFireInput = false;
+            else if (_input.fire < 0.2) prevFireInput = false;
 
 
         }
