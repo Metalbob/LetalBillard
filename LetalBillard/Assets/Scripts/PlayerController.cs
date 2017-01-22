@@ -56,9 +56,12 @@ public class PlayerController : MonoBehaviour {
     IEnumerator death(float timeDead)
     {
         isDead = true;
+        //You play the slowmotion effect;
+        KillCam.target = transform;
         _anim.SetBool("isDead", true);
         yield return new WaitForSeconds(timeDead);
         _anim.SetBool("isDead", false);
+        KillCam.Reset();
         //GameState.Instance.respawn(this.gameObject);
         StartCoroutine(GameState.Instance.StopRound(_input.playerIndex));
     }
