@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour {
     private Animator _anim;
     private PlayerInput _input;
 
+    public bool _isDead = false;
+
     [SerializeField]
     private float rumbleTime = 1.0f;
     [SerializeField]
@@ -32,7 +34,8 @@ public class PlayerController : MonoBehaviour {
     {
         if (GameState.Instance.CurState == GameState.State.RoundInProgress ||
             GameState.Instance.CurState == GameState.State.StartRound ||
-            GameState.Instance.CurState == GameState.State.EndRound)
+            GameState.Instance.CurState == GameState.State.EndRound ||
+            !_isDead)
         {
             move();
         }
@@ -59,6 +62,7 @@ public class PlayerController : MonoBehaviour {
 
     IEnumerator death(float timeDead)
     {
+        _isDead = true;
         SlowMotion.instance.SlowMo(timeDead, 0.1f);
         _anim.SetBool("isDead", true);
         AudioManager.instance.Play(Resources.Load<AudioClip>("Audio/dead"));
@@ -86,7 +90,8 @@ public class PlayerController : MonoBehaviour {
     {
         if (GameState.Instance.CurState == GameState.State.RoundInProgress ||
             GameState.Instance.CurState == GameState.State.StartRound ||
-            GameState.Instance.CurState == GameState.State.EndRound)
+            GameState.Instance.CurState == GameState.State.EndRound ||
+            !_isDead)
         {
             _rb.velocity = _vel;
             _vel *= Mathf.Pow(dec, Time.fixedDeltaTime);
