@@ -96,7 +96,8 @@ public class GameState : MonoBehaviour
 
     private IEnumerator StartGame()
     {
-
+        if (previousLD != -1)
+            LDs[previousLD].SetActive(false);
         previousLD = Random.Range(0, LDs.Length);
         LDs[previousLD].SetActive(true);
         _curState = State.StartGame;
@@ -163,9 +164,6 @@ public class GameState : MonoBehaviour
             }
             else
             {
-                LDs[previousLD].SetActive(false);
-                previousLD = Random.Range(0, LDs.Length);
-                LDs[previousLD].SetActive(true);
                 StartCoroutine(StartRound());
             }
         }
@@ -206,5 +204,13 @@ public class GameState : MonoBehaviour
 
         _curState = State.EndGame;
         PanelState.Instance.EndRoundPanel();
+
+        StartCoroutine(RestartGame());
+    }
+
+    private IEnumerator RestartGame()
+    {
+        yield return new WaitForSeconds(2);
+        StartGame();
     }
 }
