@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameState : MonoBehaviour
 {
@@ -38,10 +39,8 @@ public class GameState : MonoBehaviour
     [SerializeField]
     private GameObject _prefabPlayer2 = null;
 
-    [SerializeField]
-    private GameObject[] _spawnPlayer1;
-    [SerializeField]
-    private GameObject[] _spawnPlayer2;
+    private GameObject _spawnPlayer1;
+    private GameObject _spawnPlayer2;
 
     [SerializeField]
     private GameObject[] LDs;
@@ -64,34 +63,24 @@ public class GameState : MonoBehaviour
     private GameObject _player2 = null;
 
     public ScoreMenu scoreMenu;
+    [Header("text win")]
+    public Text winText;
+    public string p1winText = "Player 1 win";
+    public string p2winText = "Player 2 win";
 
     public GameObject Player1 { get { return _player1; } }
     public GameObject Player2 { get { return _player2; } }
 
     private void InitPosPlayer()
     {
-        int randomPlayer1 = (int)Mathf.Floor(Random.value * _spawnPlayer1.Length);
-        int randomPlayer2 = (int)Mathf.Floor(Random.value * _spawnPlayer2.Length);
-        _player1 = Instantiate(_prefabPlayer1, _spawnPlayer1[randomPlayer1].transform.position, _spawnPlayer1[randomPlayer1].transform.rotation * Quaternion.Euler(0, 0, 64)) as GameObject;
+        //int randomPlayer1 = (int)Mathf.Floor(Random.value * _spawnPlayer1.Length);
+        //int randomPlayer2 = (int)Mathf.Floor(Random.value * _spawnPlayer2.Length);
+        _spawnPlayer1 = GameObject.FindGameObjectWithTag("SpawnP1");
+        _spawnPlayer2 = GameObject.FindGameObjectWithTag("SpawnP2");
+        _player1 = Instantiate(_prefabPlayer1, _spawnPlayer1.transform.position, _spawnPlayer1.transform.rotation * Quaternion.Euler(0, 0, 64)) as GameObject;
         _player1.GetComponent<PlayerInput>().playerIndex = 1;
-        _player2 = Instantiate(_prefabPlayer2, _spawnPlayer2[randomPlayer2].transform.position, _spawnPlayer2[randomPlayer2].transform.rotation * Quaternion.Euler(0, 0, 64)) as GameObject;
+        _player2 = Instantiate(_prefabPlayer2, _spawnPlayer2.transform.position, _spawnPlayer2.transform.rotation * Quaternion.Euler(0, 0, 64)) as GameObject;
         _player2.GetComponent<PlayerInput>().playerIndex = 2;
-    }
-
-  
-
-    public void respawn(GameObject player)
-    {
-        if(player.GetComponent<PlayerInput>().playerIndex == 1)
-        {
-            int randomPlayer1 = (int)Mathf.Floor(Random.value * _spawnPlayer1.Length);
-            player.transform.position = _spawnPlayer1[randomPlayer1].transform.position;
-        }
-        else
-        {
-            int randomPlayer2 = (int)Mathf.Floor(Random.value * _spawnPlayer2.Length);
-            player.transform.position = _spawnPlayer2[randomPlayer2].transform.position;
-        }
     }
 
     private void Start()
@@ -112,7 +101,10 @@ public class GameState : MonoBehaviour
 
     private IEnumerator StartGame()
     {
-
+        if (previousLD != -1)
+            LDs[previousLD].SetActive(false);
+        _scoreP1 = 0;
+        _scoreP2 = 0;
         previousLD = Random.Range(0, LDs.Length);
         LDs[previousLD].SetActive(true);
         _curState = State.StartGame;
@@ -179,9 +171,6 @@ public class GameState : MonoBehaviour
             }
             else
             {
-                LDs[previousLD].SetActive(false);
-                previousLD = Random.Range(0, LDs.Length);
-                LDs[previousLD].SetActive(true);
                 StartCoroutine(StartRound());
             }
         }
@@ -219,8 +208,16 @@ public class GameState : MonoBehaviour
 
     public void EndGame()
     {
-
+        KillCam.Reset();
         _curState = State.EndGame;
-        PanelState.Instance.EndRoundPanel();
+        PanelState.Instance.EndGamePanel();
+        winText.text = _scoreP1 > _scoreP2 ? p1winText : p2winText;
+        StartCoroutine(RestartGame());
+    }
+
+    private IEnumerator RestartGame()
+    {
+        yield return new WaitForSeconds(2);
+        StartCoroutine(StartGame());
     }
 }

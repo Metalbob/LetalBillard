@@ -27,6 +27,14 @@ public class Bullet : MonoBehaviour {
     public GameObject bounceEffect;
     public int index;
 
+    [System.Serializable]
+    public struct TrailSetup
+    {
+        public Gradient color;
+        public Material mat;
+    }
+    public TrailSetup[] trailsColors;
+
     public WallParticleController.ParticleSetup[] particleByPlayer;
 
     private void Start()
@@ -57,6 +65,9 @@ public class Bullet : MonoBehaviour {
         velocity = new Vector3(lVelocityX, lVelocityY);
         GetComponent<Rigidbody2D>().velocity = velocity;
         index = pIndex;
+        var tr = GetComponent<TrailRenderer>();
+        tr.colorGradient = trailsColors[index - 1].color;
+        tr.material = trailsColors[index - 1].mat;
     }
     
 
