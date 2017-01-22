@@ -110,7 +110,7 @@ public class GameState : MonoBehaviour
         _curState = State.StartGame;
         PanelState.Instance.StartGamePanel();
         
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(0);
 
         StartCoroutine(StartRound());
     }
