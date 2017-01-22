@@ -58,6 +58,7 @@ public class PlayerController : MonoBehaviour {
             if (collision.gameObject.GetComponent<Bullet>().index != GetComponent<PlayerInput>().playerIndex)
             {
                 _isDead = true;
+                GetComponent<BoxCollider2D>().enabled = false;
                 SlowMotion.SlowMo(3.0f, 0.1f);
                 _anim.SetBool("isDead", true);
                 _anim.SetFloat("deathAnimSpeed", 10);
