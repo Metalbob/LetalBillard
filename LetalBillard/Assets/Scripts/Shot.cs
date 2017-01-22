@@ -58,7 +58,6 @@ public class Shot : MonoBehaviour {
                     cooldown = fireRate;
                     _anim.SetBool("isShooting", true);
                     AudioManager.instance.Play(Resources.Load<AudioClip>("Audio/shot"));
-                    Debug.LogError(Input.GetJoystickNames()[_input.playerIndex - 1]);
                     
                     scheduledShot = false;
                 }
