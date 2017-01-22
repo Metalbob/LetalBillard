@@ -32,9 +32,9 @@ public class PlayerController : MonoBehaviour {
 	
     void Update()
     {
-        if (GameState.Instance.CurState == GameState.State.RoundInProgress ||
+        if ((GameState.Instance.CurState == GameState.State.RoundInProgress ||
             GameState.Instance.CurState == GameState.State.StartRound ||
-            GameState.Instance.CurState == GameState.State.EndRound ||
+            GameState.Instance.CurState == GameState.State.EndRound) &&
             !_isDead)
         {
             move();
@@ -56,20 +56,24 @@ public class PlayerController : MonoBehaviour {
         if (collision.gameObject.GetComponent<Bullet>() != null)
         {
             if (collision.gameObject.GetComponent<Bullet>().index != GetComponent<PlayerInput>().playerIndex)
+            {
+                _isDead = true;
+                SlowMotion.instance.SlowMo(1.0f, 0.1f);
+                _anim.SetBool("isDead", true);
+                AudioManager.instance.Play(Resources.Load<AudioClip>("Audio/dead"));
+                Rumble(rumbleTime, vibrationStrength);
                 StartCoroutine(death(1.0f));
+            }
         }
     }
 
     IEnumerator death(float timeDead)
     {
-        _isDead = true;
-        SlowMotion.instance.SlowMo(timeDead, 0.1f);
-        _anim.SetBool("isDead", true);
-        AudioManager.instance.Play(Resources.Load<AudioClip>("Audio/dead"));
-        Rumble(rumbleTime, vibrationStrength);
-        yield return new WaitForSeconds(timeDead);
-        _anim.SetBool("isDead", false);
+
+        //yield return new WaitForSeconds(timeDead);
+        //_anim.SetBool("isDead", false);
         //GameState.Instance.respawn(this.gameObject);
+        yield return null;
         StartCoroutine(GameState.Instance.StopRound(_input.playerIndex));
     }
 
@@ -88,9 +92,9 @@ public class PlayerController : MonoBehaviour {
     // Update is called once per frame
     void FixedUpdate ()
     {
-        if (GameState.Instance.CurState == GameState.State.RoundInProgress ||
+        if ((GameState.Instance.CurState == GameState.State.RoundInProgress ||
             GameState.Instance.CurState == GameState.State.StartRound ||
-            GameState.Instance.CurState == GameState.State.EndRound ||
+            GameState.Instance.CurState == GameState.State.EndRound) &&
             !_isDead)
         {
             _rb.velocity = _vel;
