@@ -18,7 +18,7 @@ public class Screenshake : MonoBehaviour {
     {
 
         Camera.main.transform.position += (Vector3)dir * strenght;
-        Time.timeScale = 0.000001f;
+        //Time.timeScale = 0.000001f;
         yield return new WaitForSecondsRealtime(duration);
         Time.timeScale = 1;
         Camera.main.transform.position -= (Vector3)dir * strenght;
