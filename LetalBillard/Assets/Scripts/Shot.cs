@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Shot : MonoBehaviour {
 
-    
+    public float deadzone = 0.2f;
     public float fireRate = 1.0f;
 
     private Vector2 axis;
@@ -35,7 +35,7 @@ public class Shot : MonoBehaviour {
 
             Vector2 inputAxis = _input.aimAxis;
 
-            if (inputAxis.magnitude > 0.4f)
+            if (inputAxis.magnitude > deadzone)
             {
                 axis = inputAxis;
             }
