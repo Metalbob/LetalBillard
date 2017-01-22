@@ -9,16 +9,12 @@ public class PlayerController : MonoBehaviour {
     public float dec = 0.01f;
     public float deadPoint = 0.2f;
 
+    public bool isDead = false;
+
     private Rigidbody2D _rb;
     private Vector2 _vel;
     private Animator _anim;
     private PlayerInput _input;
-
-    [SerializeField]
-    private float rumbleTime = 1.0f;
-    [SerializeField]
-    [Range(0, 1)]
-    private float vibrationStrength = 1.0f;
 
     // Use this for initialization
     void Start () {
@@ -31,7 +27,8 @@ public class PlayerController : MonoBehaviour {
     {
         if (GameState.Instance.CurState == GameState.State.RoundInProgress ||
             GameState.Instance.CurState == GameState.State.StartRound ||
-            GameState.Instance.CurState == GameState.State.EndRound)
+            GameState.Instance.CurState == GameState.State.EndRound ||
+            !isDead)
         {
             move();
         }
@@ -58,36 +55,22 @@ public class PlayerController : MonoBehaviour {
 
     IEnumerator death(float timeDead)
     {
-        SlowMotion.instance.SlowMo(timeDead, 0.1f);
+        isDead = true;
         _anim.SetBool("isDead", true);
-        AudioManager.instance.Play(Resources.Load<AudioClip>("Audio/dead"));
-        Rumble(rumbleTime, vibrationStrength);
         yield return new WaitForSeconds(timeDead);
         _anim.SetBool("isDead", false);
         //GameState.Instance.respawn(this.gameObject);
         StartCoroutine(GameState.Instance.StopRound(_input.playerIndex));
     }
 
-    public void Rumble(float time, float strength)
-    {
-        StartCoroutine(RumbleEnum(time, strength));
-    }
-
-    IEnumerator RumbleEnum(float time, float strength)
-    {
-        //GamePadState state = GamePad.GetState((PlayerIndex)0);
-        //GamePad.SetVibration((PlayerIndex)(_input.playerIndex - 1), strength, strength);
-
-        yield return new WaitForSeconds(time);
-        //GamePad.SetVibration((PlayerIndex)(_input.playerIndex - 1), 0, 0);
-    }
 
     // Update is called once per frame
     void FixedUpdate ()
     {
         if (GameState.Instance.CurState == GameState.State.RoundInProgress ||
             GameState.Instance.CurState == GameState.State.StartRound ||
-            GameState.Instance.CurState == GameState.State.EndRound)
+            GameState.Instance.CurState == GameState.State.EndRound ||
+            !isDead)
         {
             _rb.velocity = _vel;
             _vel *= Mathf.Pow(dec, Time.fixedDeltaTime);

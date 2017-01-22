@@ -28,7 +28,8 @@ public class Shot : MonoBehaviour {
         cooldown -= Time.deltaTime;
         if (GameState.Instance.CurState == GameState.State.RoundInProgress ||
             GameState.Instance.CurState == GameState.State.StartRound ||
-            GameState.Instance.CurState == GameState.State.EndRound)
+            GameState.Instance.CurState == GameState.State.EndRound ||
+            !GetComponentInParent<PlayerController>().isDead)
         {
                        
 
@@ -46,9 +47,9 @@ public class Shot : MonoBehaviour {
         {
             GameObject bullet;
 
-            if (_input.fire > 0.2 && !prevFireInput) // Todo: Inpractical in case you press a the wrong time you to have wait a whole fireFrame before firering. Also, don't count frame, count second.
+            if (_input.fire > 0.2) // Todo: Inpractical in case you press a the wrong time you to have wait a whole fireFrame before firering. Also, don't count frame, count second.
             {
-                prevFireInput = true;
+               // prevFireInput = true;
                 scheduledShot = true;
 
                 if (cooldown <= 0.0f && scheduledShot)
@@ -64,7 +65,7 @@ public class Shot : MonoBehaviour {
                 }
                 else _anim.SetBool("isShooting", false);
             }
-            else if (_input.fire < 0.2) prevFireInput = false;
+          //  else if (_input.fire < 0.2) prevFireInput = false;
 
 
         }
