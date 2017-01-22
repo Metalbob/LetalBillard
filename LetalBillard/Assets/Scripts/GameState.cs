@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameState : MonoBehaviour
 {
@@ -62,6 +63,10 @@ public class GameState : MonoBehaviour
     private GameObject _player2 = null;
 
     public ScoreMenu scoreMenu;
+    [Header("text win")]
+    public Text winText;
+    public string p1winText = "Player 1 win";
+    public string p2winText = "Player 2 win";
 
     public GameObject Player1 { get { return _player1; } }
     public GameObject Player2 { get { return _player2; } }
@@ -204,10 +209,9 @@ public class GameState : MonoBehaviour
     public void EndGame()
     {
         KillCam.Reset();
-        Debug.Log("qùkFmùwdfkDSnfkDjfkm!");
         _curState = State.EndGame;
         PanelState.Instance.EndGamePanel();
-
+        winText.text = _scoreP1 > _scoreP2 ? p1winText : p2winText;
         StartCoroutine(RestartGame());
     }
 
