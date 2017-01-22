@@ -57,6 +57,7 @@ public class Shot : MonoBehaviour {
                 {
                     bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
                     bullet.GetComponent<Bullet>().initialize(transform.right, _input.playerIndex);
+                    bullet.GetComponent<SpriteRenderer>().color = _input.color;
                     cooldown = fireRate;
                     _anim.SetBool("isShooting", true);
                     AudioManager.instance.Play(Resources.Load<AudioClip>("Audio/shot"));

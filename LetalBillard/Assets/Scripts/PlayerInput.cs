@@ -13,6 +13,7 @@ public class PlayerInput : MonoBehaviour {
     public string fireButton;
     public string horizontalAim;
     public string verticalAim;
+    public Color color;
 
 	public Vector2 moveAxis
     {
