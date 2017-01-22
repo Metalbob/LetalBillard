@@ -119,6 +119,8 @@ public class GameState : MonoBehaviour
     {
         InitPosPlayer();
 
+        _nbrRound++;
+
         _curState = State.StartRound;
         PanelState.Instance.StartRoundPanel();
 
@@ -141,13 +143,13 @@ public class GameState : MonoBehaviour
             _player1.GetComponent<PlayerController>().StopVelocityPlayer();
             _player2.GetComponent<PlayerController>().StopVelocityPlayer();
 
-            if (indexPlayer == 0)
-            {
-                _scoreP1++;
-            }
-            else if (indexPlayer == 1)
+            if (indexPlayer == 1)
             {
                 _scoreP2++;
+            }
+            else if (indexPlayer == 2)
+            {
+                _scoreP1++;
             }
 
             _curState = State.EndRound;
