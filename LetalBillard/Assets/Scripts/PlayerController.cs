@@ -58,8 +58,9 @@ public class PlayerController : MonoBehaviour {
             if (collision.gameObject.GetComponent<Bullet>().index != GetComponent<PlayerInput>().playerIndex)
             {
                 _isDead = true;
-                SlowMotion.SlowMo(1.0f, 0.1f);
+                SlowMotion.SlowMo(3.0f, 0.1f);
                 _anim.SetBool("isDead", true);
+                _anim.SetFloat("deathAnimSpeed", 10);
                 AudioManager.instance.Play(Resources.Load<AudioClip>("Audio/dead"));
                 Rumble(rumbleTime, vibrationStrength);
                 KillCam.target = transform;

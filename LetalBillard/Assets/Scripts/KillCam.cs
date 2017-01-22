@@ -44,10 +44,10 @@ public class KillCam : MonoBehaviour {
 	void Update () {
 		if (target != null)
         {
-            var pt = Vector3.Lerp(cam.position, target.position, Time.deltaTime * lerpForce);
+            var pt = Vector3.Lerp(cam.position, target.position, Time.unscaledDeltaTime * lerpForce);
             pt.z = originalPos.z;
             cam.position = pt;
-            main.orthographicSize = Mathf.Lerp(main.orthographicSize, targetScale, Time.deltaTime * scaleLerpForce);
+            main.orthographicSize = Mathf.Lerp(main.orthographicSize, targetScale, Time.unscaledDeltaTime * scaleLerpForce);
         }
 	}
 }
