@@ -79,13 +79,11 @@ public class Bullet : MonoBehaviour {
                 GameObject go = Instantiate(bounceEffect, collision.contacts[0].point, rot);
                 go.GetComponent<WallParticleController>().setup = particleByPlayer[index-1];
                 decayTime -= hitTimePenalty;
-                Debug.LogError("HIT");
-                AudioManager.instance.Play(Resources.Load<AudioClip>("Audio/rebond"));
+                //Debug.LogError("HIT");
+                //AudioManager.instance.Play(Resources.Load<AudioClip>("Audio/rebond"));
 
-				//Tom Anim BG
-				GameObject BG = GameObject.Find("BACKGROUND IG");
-				BG.GetComponent<Animator> ().SetBool ("Impact", true);
-				Debug.Log ("Impact");
+//				GameObject BG = GameObject.Find ("BACKGROUND IG");
+//				BG.GetComponent<Animator> ().SetBool ("Impact", true);
             }
             Debug.Log(velocity.normalized);
             initialize(Vector2.Reflect(velocity.normalized, norm), index);
