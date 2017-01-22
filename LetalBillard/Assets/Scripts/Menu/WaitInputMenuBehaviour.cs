@@ -18,9 +18,11 @@ public class WaitInputMenuBehaviour : MonoBehaviour {
     public Sprite buttonPressed;
     public Sprite buttonUp;
     private bool isRumbling = false;
+    private bool isAnimating = false;
     
     void Update ()
     {
+        
 		if (Input.GetButtonDown("Submit_Player1") && !Input.GetButtonDown("Submit_Player2"))
         {
             int i;
@@ -41,11 +43,12 @@ public class WaitInputMenuBehaviour : MonoBehaviour {
             
 
             player1Validation = true;
-            imagePlayer1.sprite = buttonPressed;
+            StartCoroutine(waitAnimEnd(2.0f, imagePlayer1.gameObject.GetComponent<Animator>()));
+            Debug.Log("toto sur un velo");
+            imagePlayer2.gameObject.GetComponent<Animator>().SetBool("isUp", true);
             AudioManager.instance.Play(Resources.Load<AudioClip>("Audio/valid"));
-            imagePlayer2.sprite = buttonUp;
         }
-        if (Input.GetButtonDown("Submit_Player2") && player1Validation && !isRumbling)
+        if (Input.GetButtonDown("Submit_Player2") && player1Validation && !isRumbling && !isAnimating)
         {
             int i;
             for (i = 0; i < 4; i++)
@@ -62,7 +65,8 @@ public class WaitInputMenuBehaviour : MonoBehaviour {
             Rumble(0.3f, 0.3f, 2);
 
             player2Validation = true;
-            imagePlayer2.sprite = buttonPressed;
+            imagePlayer2.gameObject.GetComponent<Animator>().SetBool("isUp", false);
+            StartCoroutine(waitAnimEnd(2.0f, imagePlayer2.gameObject.GetComponent<Animator>()));
             AudioManager.instance.Play(Resources.Load<AudioClip>("Audio/valid"));
         }
 
@@ -74,7 +78,7 @@ public class WaitInputMenuBehaviour : MonoBehaviour {
             backButton.onClick.Invoke();
         }
 
-        if (player1Validation && player2Validation && !isRumbling)
+        if (player1Validation && player2Validation && !isRumbling && !isAnimating)
             SceneManager.LoadScene(1);
 	}
 
@@ -91,5 +95,13 @@ public class WaitInputMenuBehaviour : MonoBehaviour {
         yield return new WaitForSeconds(time);
         GamePad.SetVibration((PlayerIndex)(GamePadManager.instance.gamePadAssoc[index]), 0, 0);
         isRumbling = false;
+    }
+    IEnumerator waitAnimEnd(float time, Animator pAnim)
+    {
+        isAnimating = true;
+        pAnim.SetBool("isPressed", true);
+        yield return new WaitForSeconds(time);
+        pAnim.Stop();
+        isAnimating = false;
     }
 }
