@@ -58,10 +58,11 @@ public class PlayerController : MonoBehaviour {
             if (collision.gameObject.GetComponent<Bullet>().index != GetComponent<PlayerInput>().playerIndex)
             {
                 _isDead = true;
-                SlowMotion.instance.SlowMo(1.0f, 0.1f);
+                SlowMotion.SlowMo(1.0f, 0.1f);
                 _anim.SetBool("isDead", true);
                 AudioManager.instance.Play(Resources.Load<AudioClip>("Audio/dead"));
                 Rumble(rumbleTime, vibrationStrength);
+                KillCam.target = transform;
                 StartCoroutine(death(1.0f));
             }
         }
@@ -84,9 +85,13 @@ public class PlayerController : MonoBehaviour {
 
     IEnumerator RumbleEnum(float time, float strength)
     {
-        GamePad.SetVibration((PlayerIndex)(GamePadManager.instance.gamePadAssoc[_input.playerIndex]), strength, strength);
-        yield return new WaitForSeconds(time);
-        GamePad.SetVibration((PlayerIndex)(GamePadManager.instance.gamePadAssoc[_input.playerIndex]), 0, 0);
+        if (GamePadManager.instance.gamePadAssoc.ContainsKey(_input.playerIndex))
+        {
+            GamePad.SetVibration((PlayerIndex)(GamePadManager.instance.gamePadAssoc[_input.playerIndex]), strength, strength);
+            yield return new WaitForSeconds(time);
+            GamePad.SetVibration((PlayerIndex)(GamePadManager.instance.gamePadAssoc[_input.playerIndex]), 0, 0);
+
+        }
     }
 
     // Update is called once per frame

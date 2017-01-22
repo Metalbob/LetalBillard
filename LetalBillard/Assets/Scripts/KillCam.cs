@@ -31,9 +31,13 @@ public class KillCam : MonoBehaviour {
 
     public static void Reset()
     {
-        instance.cam.position = instance.originalPos;
-        instance.main.orthographicSize = instance.originalSize;
-        target = null;
+        if (instance != null)
+        {
+            instance.cam.position = instance.originalPos;
+            instance.main.orthographicSize = instance.originalSize;
+            target = null;
+        }
+        
     }
 	
 	// Update is called once per frame

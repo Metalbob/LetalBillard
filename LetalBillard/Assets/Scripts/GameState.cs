@@ -115,7 +115,7 @@ public class GameState : MonoBehaviour
         LDs[previousLD].SetActive(true);
         _curState = State.StartGame;
         PanelState.Instance.StartGamePanel();
-
+        KillCam.Reset();
         yield return new WaitForSeconds(3);
 
         StartCoroutine(StartRound());
@@ -129,7 +129,7 @@ public class GameState : MonoBehaviour
 
         _curState = State.StartRound;
         PanelState.Instance.StartRoundPanel();
-
+        
         yield return new WaitForSeconds(3);
         RoundInProgress();
     }
